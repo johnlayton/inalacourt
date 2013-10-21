@@ -169,7 +169,7 @@ io.of ( '/asset' ).on ( 'connection', function ( socket ) {
                       items[item.deviceID] = pub_date
                     }
                     else {
-                      debug ( "Report", "[" + item.deviceID + "] -> [" + pub_date + "]" );
+                      debug ( "Ignore", "[" + item.deviceID + "] -> [" + pub_date + "]" );
                     }
                   }
                 } );

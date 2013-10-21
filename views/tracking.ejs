@@ -85,7 +85,7 @@
         } );
         asset.on ( 'position', function ( data ) {
           var position = L.latLng ( data.position.coords.latitude,
-              data.position.coords.longitude );
+                                    data.position.coords.longitude );
           if ( !assets[data.identity] ) {
             assets[data.identity] = L.dynaMarker ( position, {
               icon : create_icon ( data ),
