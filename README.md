@@ -1,3 +1,27 @@
+NAFC Aircraft Tracking Demo
+---------------------------
+
+Tools
+
+```
+brew install https://raw.github.com/johnlayton/farmclose/master/jsenv.rb
+```
+
+```
+brew install mr
+```
+
+Install dependencies and start the server application
+
+```
+npm install -g jake && jake && npm install && jsenv rehash && npm run-script debug
+```
+
+Start the client application
+
+```
+open "http://_your_ip_address_:8080/tracking?username=_your_gateway_username_&password=_your_gateway_password_
+```
 
 My leaflet mr config file
 
