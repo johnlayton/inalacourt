@@ -1,0 +1,35 @@
+.leaflet-div-icon {
+  background: transparent;
+  border: none;
+  /*border: black 1px solid;*/
+}
+
+.dyna-icon {
+  /*width: 150px;*/
+  color: black;
+  text-shadow: 0 0 5px white;
+  font-weight: bolder;
+  white-space: nowrap;
+}
+
+.dyna-icon .asset-details {
+  clear: both;
+}
+
+.dyna-icon .icon {
+  float: left !important;
+  height: 28px;
+  width: 28px;
+  background-image: url("/images/red.png");
+}
+
+/*.dyna-icon .regn,*/
+.dyna-icon .speed,
+.dyna-icon .course,
+.dyna-icon .altitude {
+  float: left !important;
+  clear: both;
+  margin-left: 30px;
+  /*color: white;*/
+  /*font-weight: bolder;*/
+}

@@ -1,0 +1,33 @@
+div.platform-properties .title {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  font-size: large;
+  color: firebrick;
+  clear: both;
+  display: block;
+  text-transform: capitalize;
+}
+
+div.platform-properties dl {
+  border: 1px solid #ccc;
+  padding: 0.5em;
+}
+
+div.platform-properties dl dt {
+  float: left;
+  clear: left;
+  width: 100px;
+  text-align: right;
+  font-weight: bold;
+  color: firebrick;
+}
+
+div.platform-properties dl dt:after {
+  content: " : ";
+}
+
+div.platform-properties dl dd {
+  margin: 0 0 0 110px;
+  padding: 0 0 0.5em 0;
+}

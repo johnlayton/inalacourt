@@ -1,0 +1,11 @@
+.leaflet-control-notifications {
+  padding: 5px;
+}
+
+.leaflet-control-notifications-input {
+  float: left !important;
+}
+
+.leaflet-control-notifications-label {
+  float: right;
+}
