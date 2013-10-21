@@ -76,27 +76,6 @@
 
       var layer = L.layerGroup ( [] );
 
-      var data = {
-        telemetry : {
-          track : 260,
-          altitude : 8000,
-          speed : 100
-        },
-        asset : {
-          make : "Aerospacial",
-          model : "C350",
-          type : "Helicopter",
-          regn : "VH-LEV"
-        }
-      };
-
-      //var m1 = L.dynaMarker ( [-37.8, 145.9] ).addTo ( layer );
-      var m2 = L.dynaMarker ( [-37.8, 145.9], {
-        icon : create_icon ( data ),
-        title : title ( data )
-      } ).addTo ( layer );
-
-      /*
       var assets = {};
       var asset = i.connect ( "http://" + document.location.hostname + "/asset", { transports : ['websocket'] } );
       asset.on ( 'connect', function () {
@@ -137,7 +116,6 @@
           }
         } );
       } );
-      */
 
       L.control.search ( {layer : layer, initial : false} ).addTo ( map );
       L.control.fullscreen ().addTo ( map );
