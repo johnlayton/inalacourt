@@ -14,7 +14,7 @@ brew install mr
 Install dependencies and start the server application
 
 ```
-npm install -g jake && jake && npm install && jsenv rehash && npm run-script debug
+npm install -g jake && jake && npm install -g nodemon && npm install && jsenv rehash && npm run-script debug
 ```
 
 Start the client application
