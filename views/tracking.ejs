@@ -78,43 +78,40 @@
 
       var assets = {};
       var asset = i.connect ( "http://" + document.location.hostname + "/asset", { transports : ['websocket'] } );
-      asset.on ( 'connect', function () {
-        asset.emit ( 'identify', {
-          username : '<%= username %>',
-          password : '<%= password %>'
-        } );
-        asset.on ( 'position', function ( data ) {
-          var position = L.latLng ( data.position.coords.latitude,
-                                    data.position.coords.longitude );
-          if ( !assets[data.identity] ) {
-            assets[data.identity] = L.dynaMarker ( position, {
-              icon : create_icon ( data ),
-              title : title ( data )
-            } );
-            //assets[data.identity].bindPopup ( t.properties ( "Details", data.asset ) );
-            assets[data.identity].addTo ( layer );
-          }
-          else {
-            var marker = assets[data.identity];
-            if ( marker.getLatLng ().lat != position.lat ||
-                 marker.getLatLng ().lng != position.lng ) {
-              map.notification ( icon ( data ), title ( data ), message ( marker.getLatLng (), position ), null, null,
-                  function () {
-                    map.panTo ( marker.getLatLng (), {
-                      pan : {
-                        animate : true
-                      },
-                      zoom : {
-                        animate : true
-                      }
-                    } );
+      asset.on ( 'position', function ( data ) {
+        var position = L.latLng ( data.position.coords.latitude,
+            data.position.coords.longitude );
+        if ( !assets[data.identity] ) {
+          assets[data.identity] = L.dynaMarker ( position, {
+            icon : create_icon ( data ),
+            title : title ( data )
+          } );
+          //assets[data.identity].bindPopup ( t.properties ( "Details", data.asset ) );
+          assets[data.identity].addTo ( layer );
+        }
+        else {
+          var marker = assets[data.identity];
+          if ( marker.getLatLng ().lat != position.lat ||
+               marker.getLatLng ().lng != position.lng ) {
+            console.log ( "Move ..." );
+            console.log ( data );
+            map.notification ( icon ( data ), title ( data ), message ( marker.getLatLng (), position ), null, null,
+                function () {
+                  map.panTo ( marker.getLatLng (), {
+                    pan : {
+                      animate : true
+                    },
+                    zoom : {
+                      animate : true
+                    }
                   } );
-              marker.setIcon ( create_icon ( data ) );
-              //marker.bindPopup ( t.properties ( "Details", data.asset ) );
-              marker.setLatLng ( position )
-            }
+                } );
+            marker.setIcon ( create_icon ( data ) );
+            //marker.bindPopup ( t.properties ( "Details", data.asset ) );
+            marker.setLatLng ( position )
           }
-        } );
+        }
+        //} );
       } );
 
       L.control.search ( {layer : layer, initial : false} ).addTo ( map );

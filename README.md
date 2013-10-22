@@ -39,12 +39,23 @@ mr --config _path_to_mr_config_ update
 Install dependencies and start the server application
 
 ```
-npm install -g jake && \
-  npm install -g nodemon &&\
-  npm install && \
-  jake [LEAFLET_PATH=_path_to_leaflet_] [WAX_PATH=_path_to_wax_] && \
-  jsenv rehash && \
-  npm run-script debug
+npm install -g jake &&\
+npm install -g nodemon &&\
+npm install &&\
+jsenv rehash &&\
+LEAFLET_PATH=_path_to_leaflet_ WAX_PATH=_path_to_wax_ jake&&\
+GATEWAY_USERNAME=_username_ GATEWAY_PASSWORD=_password_ npm run-script debug
+```
+
+eg:
+
+```
+npm install -g jake &&\
+npm install -g nodemon &&\
+npm install &&\
+jsenv rehash &&\
+LEAFLET_PATH=_path_to_leaflet_ WAX_PATH=_path_to_wax_ jake&&\
+GATEWAY_USERNAME=_username_ GATEWAY_PASSWORD=_password_ npm run-script debug
 ```
 
 Start the client application
@@ -52,5 +63,3 @@ Start the client application
 ```
 open "http://_your_ip_address_:8080/tracking?username=_your_gateway_username_&password=_your_gateway_password_
 ```
-
-My leaflet mr config file

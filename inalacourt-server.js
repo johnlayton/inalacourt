@@ -12,7 +12,8 @@ var connect = require ( 'connect' )
   , http = require ( 'http' )
   , colors = require ( 'colors' )
   , brfs = require ( 'brfs' )
-  , report = require ( './lib/inalacourt.tracplus.js' );
+  , report = require ( './lib/inalacourt.tracplus.js' )
+  , level = require('level');
 
 var app = express ();
 
@@ -89,8 +90,6 @@ app.get ( "/tracking", function ( req, res ) {
   var agent = req.headers['user-agent'];
   res.render ( 'tracking', {
     title : 'Tracking',
-    username : req.param ( 'username' ),
-    password : req.param ( 'password' ),
     agent : agent
   } );
 } );
@@ -125,66 +124,42 @@ var server = http.createServer ( app ).listen ( app.get ( 'port' ), "0.0.0.0", f
  */
 var io = require ( 'socket.io' ).listen ( server );
 io.set ( 'log level', 1 );
-io.of ( '/asset' ).on ( 'connection', function ( socket ) {
-  socket.set ( 'items', {}, function () {
-    socket.on ( 'identify', function ( data ) {
-      socket.set ( 'identity', data, function () {
-        var interval = setInterval ( function () {
-          socket.get ( 'identity', function ( err, identity ) {
-            if ( err ) {
-              debug ( "Error", err )
-            }
-            else {
-              //debug ( "Report", new Date ().toISOString () );
-              socket.get ( 'items', function ( err, items ) {
-                report ( identity, function ( err, item ) {
-                  if ( err ) {
-                    error ( "Identity Not Found", err )
-                  }
-                  if ( item ) {
-                    var pub_date = new Date ( item.pubDate );
-                    if ( !items[item.deviceID] || items[item.deviceID] < pub_date ) {
-                      debug ( "Report", "[" + item.deviceID + "] -> [" + pub_date + "]" );
-                      socket.emit ( 'position', {
-                        identity : item.deviceID,
-                        asset : {
-                          type : item.assetType,
-                          regn : item.assetRegn,
-                          name : item.assetName,
-                          make : item.assetMake,
-                          model : item.assetModel
-                        },
-                        telemetry : {
-                          speed : item.speed,
-                          track : item.track,
-                          altitude : item.altitude
-                        },
-                        position : {
-                          coords : {
-                            latitude : item.latitude,
-                            longitude : item.longitude
-                          }
-                        }
-                      } );
-                      items[item.deviceID] = pub_date
-                    }
-                    else {
-                      debug ( "Ignore", "[" + item.deviceID + "] -> [" + pub_date + "]" );
-                    }
-                  }
-                } );
-              } );
-            }
-          } );
-        }, 60000 );
-        socket.on ( 'disconnect', function () {
-          debug ( "disconnect", util.inspect ( interval ) );
-          clearInterval ( interval );
-        } );
+
+setInterval ( function () {
+  var identity = {
+    username : process.env.GATEWAY_USERNAME || "username",
+    password : process.env.GATEWAY_PASSWORD || "password"
+  };
+  report ( identity, function ( err, item ) {
+    if ( err ) {
+      error ( "Identity Not Found", err )
+    }
+    if ( item ) {
+      io.of ( '/asset' ).emit ( 'position', {
+        identity : item.deviceID,
+        asset : {
+          type : item.assetType,
+          regn : item.assetRegn,
+          name : item.assetName,
+          make : item.assetMake,
+          model : item.assetModel
+        },
+        telemetry : {
+          speed : item.speed,
+          track : item.track,
+          altitude : item.altitude
+        },
+        position : {
+          coords : {
+            latitude : item.latitude,
+            longitude : item.longitude
+          }
+        }
       } );
-    } );
+    }
   } );
-} );
+
+}, 60000 );
 
 /**
  * Show red error message in console

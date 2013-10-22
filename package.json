@@ -26,10 +26,10 @@
     "less-middleware" : "*",
     "fs-extra" : "*",
     "ncp" : "*",
+    "level" : "*",
     "xml-stream" : "*"
   },
   "todo": {
     "install_odbc" : "\"odbc\" : \"*\",",
-    "install_levelup" : ""
   }
 }
