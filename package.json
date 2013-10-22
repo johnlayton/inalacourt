@@ -30,6 +30,6 @@
     "xml-stream" : "*"
   },
   "todo": {
-    "install_odbc" : "\"odbc\" : \"*\",",
+    "install_odbc" : "\"odbc\" : \"*\","
   }
 }

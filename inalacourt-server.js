@@ -131,11 +131,13 @@ setInterval ( function () {
     password : process.env.GATEWAY_PASSWORD || "password"
   };
   report ( identity, function ( err, item ) {
+    var sockets = io.of ( '/asset' );
     if ( err ) {
-      error ( "Identity Not Found", err )
+      error ( "Identity Not Found", err );
     }
     if ( item ) {
-      io.of ( '/asset' ).emit ( 'position', {
+      debug("Report Item", util.inspect( item ) );
+      sockets.emit ( 'position', {
         identity : item.deviceID,
         asset : {
           type : item.assetType,
