@@ -50,6 +50,7 @@ Install dependencies and start the server application
 
 ```
 npm install -g jake && \
+  npm install -g nodemon &&\
   jake [LEAFLET_PATH=_path_to_leaflet_] [WAX_PATH=_path_to_wax_] && \
   npm install && \
   jsenv rehash && \
