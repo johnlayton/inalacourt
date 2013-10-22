@@ -13,16 +13,6 @@ Checkout the leaflet projects
 brew install mr
 ```
 
-```
-npm install -g jake && jake && npm install && jsenv rehash && npm run-script debug
-```
-
-Start the client application
-
-```
-open "http://_your_ip_address_:8080/tracking?username=_your_gateway_username_&password=_your_gateway_password_
-```
-
 My leaflet mr config file
 
 ```
@@ -51,8 +41,8 @@ Install dependencies and start the server application
 ```
 npm install -g jake && \
   npm install -g nodemon &&\
-  jake [LEAFLET_PATH=_path_to_leaflet_] [WAX_PATH=_path_to_wax_] && \
   npm install && \
+  jake [LEAFLET_PATH=_path_to_leaflet_] [WAX_PATH=_path_to_wax_] && \
   jsenv rehash && \
   npm run-script debug
 ```
