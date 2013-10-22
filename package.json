@@ -24,12 +24,12 @@
     "socket.io-browserify" : "*",
     "brfs" : "*",
     "less-middleware" : "*",
-
     "fs-extra" : "*",
     "ncp" : "*",
-
-    "odbc" : "*",
-
     "xml-stream" : "*"
+  },
+  "todo": {
+    "install_odbc" : "\"odbc\" : \"*\",",
+    "install_levelup" : ""
   }
 }
