@@ -12,8 +12,9 @@ var connect = require ( 'connect' )
   , http = require ( 'http' )
   , colors = require ( 'colors' )
   , brfs = require ( 'brfs' )
+  , through = require ( 'through' )
   , report = require ( './lib/inalacourt.tracplus.js' )
-  , level = require('level');
+  , database = require ( './lib/inalacourt.database.js' );
 
 var app = express ();
 
@@ -94,6 +95,21 @@ app.get ( "/tracking", function ( req, res ) {
   } );
 } );
 
+app.get ( "/details", function ( req, res ) {
+  var agent = req.headers['user-agent'];
+  database ( "reports" )
+    .list ()
+    .pipe ( through (function ( data ) {
+      this.queue ( JSON.stringify( data ) );
+    } ) )
+    .pipe( res );
+} );
+
+app.get ( "/details/:id", function ( req, res ) {
+  var agent = req.headers['user-agent'];
+  database ( "reports" ).list ( req.params.id ).pipe( res )
+} );
+
 app.get ( "/browserify/load", function ( req, res ) {
   res.set ( "Content-Type", "application/javascript" );
   underscore.inject ( req.param ( 'libs' ) ? req.param ( 'libs' ).split ( ',' ) : underscore.keys ( libs ),
@@ -135,8 +151,9 @@ setInterval ( function () {
     if ( err ) {
       error ( "Identity Not Found", err );
     }
-    if ( item ) {
-      debug("Report Item", util.inspect( item ) );
+    database ( 'reports' ).put ( item, function ( err, item ) {
+    } );
+      debug ( "Report Item", util.inspect ( item ) );
       sockets.emit ( 'position', {
         identity : item.deviceID,
         asset : {
@@ -158,10 +175,9 @@ setInterval ( function () {
           }
         }
       } );
-    }
   } );
 
-}, 60000 );
+}, 10000 );
 
 /**
  * Show red error message in console

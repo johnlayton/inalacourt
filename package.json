@@ -1,35 +1,36 @@
 {
-  "name" : "inalacourt",
-  "version" : "0.0.0",
-  "description" : "",
-  "main" : "inalacourt-server.js",
-  "scripts" : {
-    "test" : "echo \"Error: no test specified\" && exit 1",
-    "debug" : "nodemon -w . -w views inalacourt-server.js"
+  "name": "inalacourt",
+  "version": "0.0.0",
+  "description": "",
+  "main": "inalacourt-server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug": "nodemon -w . -w views inalacourt-server.js"
   },
-  "author" : "johnstewartlayton@gmail.com",
-  "license" : "",
-  "dependencies" : {
-    "connect" : "*",
-    "domready" : "*",
-    "browserify" : "*",
-    "underscore" : "*",
-    "oppressor" : "*",
-    "hyperglue" : "*",
-    "colors" : "*",
-    "express" : "*",
-    "ejs" : "*",
-    "socket.io" : "*",
-    "socket.io-client" : "*",
+  "author": "johnstewartlayton@gmail.com",
+  "license": "",
+  "dependencies": {
+    "connect"              : "*",
+    "domready"             : "*",
+    "browserify"           : "*",
+    "underscore"           : "*",
+    "oppressor"            : "*",
+    "hyperglue"            : "*",
+    "colors"               : "*",
+    "express"              : "*",
+    "ejs"                  : "*",
+    "socket.io"            : "*",
+    "socket.io-client"     : "*",
     "socket.io-browserify" : "*",
-    "brfs" : "*",
-    "less-middleware" : "*",
-    "fs-extra" : "*",
-    "ncp" : "*",
-    "level" : "*",
-    "xml-stream" : "*"
+    "brfs"                 : "*",
+    "less-middleware"      : "*",
+    "fs-extra"             : "*",
+    "ncp"                  : "*",
+    "level"                : "*",
+    "xml-stream"           : "*",
+    "through"              : "*"
   },
   "todo": {
-    "install_odbc" : "\"odbc\" : \"*\","
+    "install_odbc": "\"odbc\" : \"*\","
   }
 }
