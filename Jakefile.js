@@ -63,7 +63,7 @@ task ( 'build', function () {
   _.each ( paths[env.ENV || 'remote'], function ( files ) {
     fs.copy ( path.join ( files.src ), path.join ( __dirname, files.dest ),
       function ( file ) {
-        return file.toString().search(/.js|.png|.css|.jpg/);
+        return file.toString().search(/\.js|\.png|\.css|\.jpg/);
       },
       function ( err ) {
         if ( err ) {

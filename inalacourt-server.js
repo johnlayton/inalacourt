@@ -107,7 +107,12 @@ app.get ( "/details", function ( req, res ) {
 
 app.get ( "/details/:id", function ( req, res ) {
   var agent = req.headers['user-agent'];
-  database ( "reports" ).list ( req.params.id ).pipe( res )
+  database ( "reports" )
+    .list ( req.params.id )
+    .pipe ( through (function ( data ) {
+      this.queue ( JSON.stringify( data ) );
+    } ) )
+    .pipe( res )
 } );
 
 app.get ( "/browserify/load", function ( req, res ) {
