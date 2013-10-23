@@ -131,40 +131,44 @@ var server = http.createServer ( app ).listen ( app.get ( 'port' ), "0.0.0.0", f
 } );
 
 /*
- Listen for web sockets
+ Object representation of the device report
  */
-var io = require ( 'socket.io' ).listen ( server );
-io.set ( 'log level', 1 );
-
-var extracted = function ( itm ) {
-  debug ( "Extracted", util.inspect ( itm ) );
+var extracted = function ( item ) {
+  //debug ( "Extracted", util.inspect ( itm ) );
   return {
-    identity : itm.deviceID,
+    identity : item.deviceID,
     asset : {
-      type : itm.assetType,
-      regn : itm.assetRegn,
-      name : itm.assetName,
-      make : itm.assetMake,
-      model : itm.assetModel
+      type : item.assetType,
+      regn : item.assetRegn,
+      name : item.assetName,
+      make : item.assetMake,
+      model : item.assetModel
     },
     telemetry : {
-      speed : itm.speed,
-      track : itm.track,
-      altitude : itm.altitude
+      speed : item.speed,
+      track : item.track,
+      altitude : item.altitude
     },
     position : {
       coords : {
-        latitude : itm.latitude,
-        longitude : itm.longitude
+        latitude : item.latitude,
+        longitude : item.longitude
       }
     }
   };
 };
 
-var sockets = io.of ( '/asset' );
 
+/*
+ Listen for web sockets
+ */
+var io = require ( 'socket.io' ).listen ( server );
+io.set ( 'log level', 1 );
+var sockets = io.of ( '/asset' );
 sockets.on ( 'connection', function ( socket ) {
-  debug ( "Client Connection", util.inspect ( socket ) );
+  database ( 'reports' ).latest ( function ( err, itm ) {
+    socket.emit ( 'position', extracted ( itm ) );
+  } );
 } );
 
 setInterval ( function () {
@@ -172,10 +176,9 @@ setInterval ( function () {
     username : process.env.GATEWAY_USERNAME || "username",
     password : process.env.GATEWAY_PASSWORD || "password"
   };
-  debug ( "Get Report", util.inspect ( identity ) );
   report ( identity, function ( err, item ) {
     if ( err ) {
-      error ( "Identity Not Found", err );
+      error ( "Report", err );
     }
     else {
       database ( 'reports' ).put ( item, function ( err, itm ) {
@@ -183,7 +186,6 @@ setInterval ( function () {
       } );
     }
   } );
-
 }, 10000 );
 
 /**

@@ -89,12 +89,14 @@
             title : title ( data ),
             track : L.geoJson.ajax ( c + 'details' + '/' + data.identity + '?type=linestring', { } )
           } );
-          //assets[data.identity].bindPopup ( t.properties ( "Details", data.asset ) );
+          assets[data.identity].bindPopup ( t.properties ( "Details", data.asset ) );
           assets[data.identity].addTo ( layer );
-          assets[data.identity].on ( 'mouseover', function ( e ) {
+          assets[data.identity].on ( 'popupopen', function ( e ) {
+            //assets[data.identity].openPopup();
             map.addLayer( e.target.options.track );
           } );
-          assets[data.identity].on ( 'mouseout', function ( e ) {
+          assets[data.identity].on ( 'popupclose', function ( e ) {
+            //assets[data.identity].closePopup();
             map.removeLayer( e.target.options.track );
           } );
         }

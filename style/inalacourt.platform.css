@@ -1,3 +1,9 @@
+div.leaflet-popup,
+div.leaflet-popup-content-wrapper,
+div.platform-properties {
+ background: transparent;
+}
+
 div.platform-properties .title {
   width: 100%;
   text-align: center;

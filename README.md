@@ -1,20 +1,28 @@
 NAFC Aircraft Tracking Demo
 ---------------------------
 
-Tools
+Setup
+-----
 
+1. Directory structure
 ```
-brew install https://raw.github.com/johnlayton/farmclose/master/jsenv.rb
+~
+└── Development
+    ├── home
+    |   └── analacourt
+    └── public
+        ├── leaflet
+        |   ├── .mrconfig
+        |   ├── Leaflet
+        |   ├── Leaflet.search
+        |   ├── Leaflet.fullscreen
+        |   ├── Leaflet.ajax
+        |   ├── Leaflet.hash
+        |   └── Leaflet.markercluster
+        └── wax
 ```
 
-Checkout the leaflet projects
-
-```
-brew install mr
-```
-
-My leaflet mr config file
-
+1(a). My leaflet mr config file (.mrconfig)
 ```
 [Leaflet]
 checkout = git clone 'https://github.com/Leaflet/Leaflet.git' 'Leaflet'
@@ -30,13 +38,27 @@ checkout = git clone 'https://github.com/Leaflet/Leaflet.markercluster.git' 'Lea
 
 [Leaflet.search]
 checkout = git clone 'https://github.com/stefanocudini/leaflet-search.git' 'Leaflet.search'
+
+[Leaflet.ajax]
+checkout = git clone 'https://github.com/calvinmetcalf/leaflet-ajax.git' 'Leaflet.ajax'
 ```
 
+1(b). Install mr
+```
+brew install mr
+```
+
+1(c). Checkout the leaflet projects
 ```
 mr --config _path_to_mr_config_ update
 ```
 
-Install dependencies and start the server application
+2. Install jsenv (rbenv for node)
+```
+brew install https://raw.github.com/johnlayton/farmclose/master/jsenv.rb
+```
+
+3. Install dependencies and start the server application
 
 ```
 npm install -g jake &&\
@@ -54,12 +76,12 @@ npm install -g jake &&\
 npm install -g nodemon &&\
 npm install &&\
 jsenv rehash &&\
-LEAFLET_PATH=_path_to_leaflet_ WAX_PATH=_path_to_wax_ jake&&\
+LEAFLET_PATH=~/Development/public/leaflet WAX_PATH=~/Development/public/wax jake&&\
 GATEWAY_USERNAME=_username_ GATEWAY_PASSWORD=_password_ npm run-script debug
 ```
 
-Start the client application
+4. Start the client application
 
 ```
-open "http://_your_ip_address_:8080/tracking?username=_your_gateway_username_&password=_your_gateway_password_
+open "http://_your_ip_address_:8080
 ```
