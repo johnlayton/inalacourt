@@ -21,6 +21,7 @@
     <script src="/dist/leaflet.fullscreen.js"></script>
     <script src="/dist/leaflet.hash.js"></script>
     <script src="/dist/leaflet.search.js"></script>
+    <script src="/dist/leaflet.ajax.js"></script>
 
     <% if ( agent.indexOf( 'Mobile' ) > 0 ) {%>
     <script src="/dist/cordova-2.3.0.js"></script>
@@ -41,8 +42,7 @@
     <script>
 
       var b = "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/";
-
-      var c = "http://" + document.location.hostname + ":8888/";
+      var c = "http://" + document.location.hostname + ":8080/";
       var f = '/{z}/{x}/{y}.png';
       var g = '/{z}/{y}/{x}.png';
 
@@ -79,22 +79,29 @@
       var assets = {};
       var asset = i.connect ( "http://" + document.location.hostname + "/asset", { transports : ['websocket'] } );
       asset.on ( 'position', function ( data ) {
-        var position = L.latLng ( data.position.coords.latitude,
+        var position = L.latLng (
+            data.position.coords.latitude,
             data.position.coords.longitude );
+        console.log( data );
         if ( !assets[data.identity] ) {
           assets[data.identity] = L.dynaMarker ( position, {
-            icon : create_icon ( data ),
-            title : title ( data )
+            icon  : create_icon ( data ),
+            title : title ( data ),
+            track : L.geoJson.ajax ( c + 'details' + '/' + data.identity + '?type=linestring', { } )
           } );
           //assets[data.identity].bindPopup ( t.properties ( "Details", data.asset ) );
           assets[data.identity].addTo ( layer );
+          assets[data.identity].on ( 'mouseover', function ( e ) {
+            map.addLayer( e.target.options.track );
+          } );
+          assets[data.identity].on ( 'mouseout', function ( e ) {
+            map.removeLayer( e.target.options.track );
+          } );
         }
         else {
           var marker = assets[data.identity];
           if ( marker.getLatLng ().lat != position.lat ||
                marker.getLatLng ().lng != position.lng ) {
-            console.log ( "Move ..." );
-            console.log ( data );
             map.notification ( icon ( data ), title ( data ), message ( marker.getLatLng (), position ), null, null,
                 function () {
                   map.panTo ( marker.getLatLng (), {
@@ -106,6 +113,7 @@
                     }
                   } );
                 } );
+            marker.options.track.refresh();
             marker.setIcon ( create_icon ( data ) );
             //marker.bindPopup ( t.properties ( "Details", data.asset ) );
             marker.setLatLng ( position )

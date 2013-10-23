@@ -14,6 +14,7 @@ var connect = require ( 'connect' )
   , brfs = require ( 'brfs' )
   , through = require ( 'through' )
   , report = require ( './lib/inalacourt.tracplus.js' )
+  , geojson = require ( './lib/inalacourt.geojson.js' )
   , database = require ( './lib/inalacourt.database.js' );
 
 var app = express ();
@@ -81,8 +82,8 @@ var libs = {
  */
 app.get ( "/", function ( req, res ) {
   var agent = req.headers['user-agent'];
-  res.render ( 'index', {
-    title : 'Welcome',
+  res.render ( 'tracking', {
+    title : 'Tracking',
     agent : agent
   } );
 } );
@@ -95,24 +96,13 @@ app.get ( "/tracking", function ( req, res ) {
   } );
 } );
 
-app.get ( "/details", function ( req, res ) {
-  var agent = req.headers['user-agent'];
-  database ( "reports" )
-    .list ()
-    .pipe ( through (function ( data ) {
-      this.queue ( JSON.stringify( data ) );
-    } ) )
-    .pipe( res );
-} );
-
 app.get ( "/details/:id", function ( req, res ) {
   var agent = req.headers['user-agent'];
   database ( "reports" )
     .list ( req.params.id )
-    .pipe ( through (function ( data ) {
-      this.queue ( JSON.stringify( data ) );
-    } ) )
-    .pipe( res )
+    .pipe ( geojson ( req.param ( 'type' ) || "points" ) )
+    .pipe ( oppressor ( req ) )
+    .pipe ( res )
 } );
 
 app.get ( "/browserify/load", function ( req, res ) {
@@ -146,40 +136,52 @@ var server = http.createServer ( app ).listen ( app.get ( 'port' ), "0.0.0.0", f
 var io = require ( 'socket.io' ).listen ( server );
 io.set ( 'log level', 1 );
 
+var extracted = function ( itm ) {
+  debug ( "Extracted", util.inspect ( itm ) );
+  return {
+    identity : itm.deviceID,
+    asset : {
+      type : itm.assetType,
+      regn : itm.assetRegn,
+      name : itm.assetName,
+      make : itm.assetMake,
+      model : itm.assetModel
+    },
+    telemetry : {
+      speed : itm.speed,
+      track : itm.track,
+      altitude : itm.altitude
+    },
+    position : {
+      coords : {
+        latitude : itm.latitude,
+        longitude : itm.longitude
+      }
+    }
+  };
+};
+
+var sockets = io.of ( '/asset' );
+
+sockets.on ( 'connection', function ( socket ) {
+  debug ( "Client Connection", util.inspect ( socket ) );
+} );
+
 setInterval ( function () {
   var identity = {
     username : process.env.GATEWAY_USERNAME || "username",
     password : process.env.GATEWAY_PASSWORD || "password"
   };
+  debug ( "Get Report", util.inspect ( identity ) );
   report ( identity, function ( err, item ) {
-    var sockets = io.of ( '/asset' );
     if ( err ) {
       error ( "Identity Not Found", err );
     }
-    database ( 'reports' ).put ( item, function ( err, item ) {
-    } );
-      debug ( "Report Item", util.inspect ( item ) );
-      sockets.emit ( 'position', {
-        identity : item.deviceID,
-        asset : {
-          type : item.assetType,
-          regn : item.assetRegn,
-          name : item.assetName,
-          make : item.assetMake,
-          model : item.assetModel
-        },
-        telemetry : {
-          speed : item.speed,
-          track : item.track,
-          altitude : item.altitude
-        },
-        position : {
-          coords : {
-            latitude : item.latitude,
-            longitude : item.longitude
-          }
-        }
+    else {
+      database ( 'reports' ).put ( item, function ( err, itm ) {
+        sockets.emit ( 'position', extracted ( itm ) );
       } );
+    }
   } );
 
 }, 10000 );
