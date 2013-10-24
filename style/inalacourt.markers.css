@@ -30,10 +30,7 @@
   background-image: url("/images/orange.png");
 }
 
-/*.dyna-icon .regn,*/
-.dyna-icon .speed,
-.dyna-icon .course,
-.dyna-icon .altitude {
+.asset-details {
   float: left !important;
   clear: both;
   margin-left: 30px;
