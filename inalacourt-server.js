@@ -15,7 +15,8 @@ var connect = require ( 'connect' )
   , through = require ( 'through' )
   , report = require ( './lib/inalacourt.tracplus.js' )
   , geojson = require ( './lib/inalacourt.geojson.js' )
-  , database = require ( './lib/inalacourt.database.js' );
+  , database = require ( './lib/inalacourt.database.js' )
+  , nswData = require ( './lib/nsw_data.json' );
 
 var app = express ();
 
@@ -135,6 +136,8 @@ var server = http.createServer ( app ).listen ( app.get ( 'port' ), "0.0.0.0", f
  */
 var extracted = function ( item ) {
   //debug ( "Extracted", util.inspect ( itm ) );
+  var nsw_data = lookupNswData( item.assetRegn );
+
   return {
     identity : item.deviceID,
     asset : {
@@ -154,10 +157,27 @@ var extracted = function ( item ) {
         latitude : item.latitude,
         longitude : item.longitude
       }
-    }
+    },
+    arena : nsw_data
   };
 };
 
+var lookupNswData = function ( regn ) {
+  if( regn.search(/VH-.../) >= 0 )
+  {
+    rego_code = regn.match( /VH-(...)/)[1];
+    return nswData[ rego_code ];
+  }
+  if( regn.search(/N[0-9]{3}[^ ]* /) >= 0 )
+  {
+    rego_code = regn.match( /(N[0-9]{3}[^ ]*) /)[1];
+    return nswData[ rego_code ];
+  }
+  else
+  {
+    return null;
+  }
+}
 
 /*
  Listen for web sockets
