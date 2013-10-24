@@ -20,7 +20,14 @@
   float: left !important;
   height: 28px;
   width: 28px;
+}
+
+.dyna-icon .active {
   background-image: url("/images/red.png");
+}
+
+.dyna-icon .stationary {
+  background-image: url("/images/orange.png");
 }
 
 /*.dyna-icon .regn,*/
