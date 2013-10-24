@@ -41,6 +41,18 @@ checkout = git clone 'https://github.com/stefanocudini/leaflet-search.git' 'Leaf
 
 [Leaflet.ajax]
 checkout = git clone 'https://github.com/calvinmetcalf/leaflet-ajax.git' 'Leaflet.ajax'
+
+[Leaflet.pip]
+checkout = git clone 'https://github.com/mapbox/leaflet-pip.git' 'Leaflet.pip'
+
+[Leaflet.dvf]
+checkout = git clone 'https://github.com/humangeo/leaflet-dvf.git' 'Leaflet.dvf'
+
+[Leaflet.draw]
+checkout = git clone 'https://github.com/Leaflet/Leaflet.draw.git' 'Leaflet.draw'
+
+[Leaflet.label]
+checkout = git clone 'https://github.com/Leaflet/Leaflet.label.git' 'Leaflet.label'
 ```
 
 1(b). Install mr
