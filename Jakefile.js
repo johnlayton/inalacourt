@@ -8,12 +8,9 @@ var env = process.env;
 var dev = '../..';
 var pub = 'public';
 var leaf = env.LEAFLET_PATH || path.join ( dev, pub, 'leaflet' );
-var wax = env.WAX_PATH || path.join ( dev, pub, 'wax' );
 
 var paths = {
   remote : [
-    { src : path.join ( wax, 'dist' ),
-      dest : 'dist' },
     { src : path.join ( leaf, 'Leaflet/dist' ),
       dest : 'dist' },
     { src : path.join ( leaf, 'Leaflet.ajax/dist' ),
