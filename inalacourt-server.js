@@ -73,6 +73,10 @@ var libs = {
     library : './lib/inalacourt.dynamarker.js',
     options : { expose : 'dynamarker' }
   },
+  legend : {
+    library : './lib/inalacourt.legend.js',
+    options : { expose : 'legend' }
+  },
   util : {
     library : 'util',
     options : { expose : 'util' }
