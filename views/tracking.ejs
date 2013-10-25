@@ -126,8 +126,9 @@
 
     function onEachFeature ( feature, layer ) {
       layer.on ( {
-        mouseover : highlightFeature ( feature ),
-        mouseout : resetHighlight
+        //mouseover : highlightFeature ( feature ),
+        //mouseout : resetHighlight,
+        click : highlightFeature ( feature )
       } );
     }
 
@@ -163,7 +164,7 @@
         marker.on ( 'mouseover', function ( e ) {
           map.addLayer ( e.target.options.track =
                          e.target.options.track ||
-                         L.geoJson.ajax ( '/details/' + data.identity + '?type=linestring', { } ) );
+                         L.geoJson.ajax ( '/details/' + data.identity + '?type=linestring&hours=24', { } ) );
           legend.update ( "asset", L.extend ( {}, data.asset, data.arena ) );
         } );
         marker.on ( 'mouseout', function ( e ) {

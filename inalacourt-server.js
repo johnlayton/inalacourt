@@ -115,7 +115,7 @@ app.get ( "/details/:id", function ( req, res ) {
   var agent = req.headers['user-agent'];
   res.set ( "Content-Type", "application/json" );
   database ( "reports" )
-    .list ( req.params.id )
+    .list ( req.params.id, ( req.param ( 'hours' ) || 48 ) )
     .pipe ( geojson ( req.param ( 'type' ) || "points" ) )
     .pipe ( oppressor ( req ) )
     .pipe ( res )
