@@ -77,7 +77,7 @@ npm install -g jake &&\
 npm install -g nodemon &&\
 npm install &&\
 jsenv rehash &&\
-LEAFLET_PATH=_path_to_leaflet_ WAX_PATH=_path_to_wax_ jake&&\
+LEAFLET_PATH=_path_to_leaflet_ jake&&\
 GATEWAY_USERNAME=_username_ GATEWAY_PASSWORD=_password_ npm run-script debug
 ```
 
@@ -88,7 +88,7 @@ npm install -g jake &&\
 npm install -g nodemon &&\
 npm install &&\
 jsenv rehash &&\
-LEAFLET_PATH=~/Development/public/leaflet WAX_PATH=~/Development/public/wax jake&&\
+LEAFLET_PATH=~/Development/public/leaflet jake&&\
 GATEWAY_USERNAME=_username_ GATEWAY_PASSWORD=_password_ npm run-script debug
 ```
 
