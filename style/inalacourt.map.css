@@ -1,0 +1,7 @@
+.leaflet-container {
+  background: black;
+}
+
+.leaflet-tile-pane {
+  opacity: 0.65;
+}

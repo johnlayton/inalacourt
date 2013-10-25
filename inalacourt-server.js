@@ -107,6 +107,7 @@ app.get ( "/incidents", function ( req, res ) {
   res.set ( "Content-Type", "application/json" );
   georss ( "http://www.rfs.nsw.gov.au/feeds/majorIncidents.xml" )
     .pipe ( geojson ( req.param ( 'type' ) || "georss" ) )
+    .pipe ( oppressor ( req ) )
     .pipe ( res )
 } );
 

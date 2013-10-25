@@ -1,10 +1,19 @@
 div.leaflet-popup,
 div.leaflet-popup-content-wrapper,
+div.leaflet-popup-tip-container,
+div.leaflet-popup-tip,
 div.platform-properties {
  background: transparent;
 }
 
 div.platform-properties .title {
+  color: black;
+  text-shadow: -1px -1px 1px #CCC, 1px -1px 1px #CCC, -1px 1px 1px #CCC, 1px 1px 1px #CCC;
+  font-weight: bolder;
+  white-space: nowrap;
+
+
+
   width: 100%;
   text-align: center;
   font-weight: bold;
