@@ -16,7 +16,8 @@ var connect = require ( 'connect' )
   , report = require ( './lib/inalacourt.tracplus.js' )
   , geojson = require ( './lib/inalacourt.geojson.js' )
   , database = require ( './lib/inalacourt.database.js' )
-  , nswData = require ( './lib/nsw_data.json' );
+  , georss = require ( './lib/inalacourt.georss.js' )
+  , nswData = require ( './data/nsw_data.json' );
 
 var app = express ();
 
@@ -97,8 +98,17 @@ app.get ( "/tracking", function ( req, res ) {
   } );
 } );
 
+app.get ( "/incidents", function ( req, res ) {
+  var agent = req.headers['user-agent'];
+  res.set ( "Content-Type", "application/json" );
+  georss ( "http://www.rfs.nsw.gov.au/feeds/majorIncidents.xml" )
+    .pipe ( geojson ( req.param ( 'type' ) || "georss" ) )
+    .pipe ( res )
+} );
+
 app.get ( "/details/:id", function ( req, res ) {
   var agent = req.headers['user-agent'];
+  res.set ( "Content-Type", "application/json" );
   database ( "reports" )
     .list ( req.params.id )
     .pipe ( geojson ( req.param ( 'type' ) || "points" ) )
@@ -128,16 +138,14 @@ app.get ( "/browserify/load", function ( req, res ) {
  Create Server
  */
 var server = http.createServer ( app ).listen ( app.get ( 'port' ), "0.0.0.0", function () {
-  debug ( "inalacourt running", util.inspect ( app.routes, false, 2 ) );
+  debug ( "inalacourt running", util.inspect ( app ) );
 } );
 
 /*
  Object representation of the device report
  */
 var extracted = function ( item ) {
-  //debug ( "Extracted", util.inspect ( itm ) );
-  var nsw_data = lookupNswData( item.assetRegn );
-
+  var nsw_data = lookupNswData ( item.assetRegn );
   return {
     identity : item.deviceID,
     asset : {
@@ -163,18 +171,15 @@ var extracted = function ( item ) {
 };
 
 var lookupNswData = function ( regn ) {
-  if( regn.search(/VH-.../) >= 0 )
-  {
-    rego_code = regn.match( /VH-(...)/)[1];
+  if ( regn.search ( /VH-.../ ) >= 0 ) {
+    rego_code = regn.match ( /VH-(...)/ )[1];
     return nswData[ rego_code ];
   }
-  if( regn.search(/N[0-9]{3}[^ ]* /) >= 0 )
-  {
-    rego_code = regn.match( /(N[0-9]{3}[^ ]*) /)[1];
+  if ( regn.search ( /N[0-9]{3}[^ ]* / ) >= 0 ) {
+    rego_code = regn.match ( /(N[0-9]{3}[^ ]*) / )[1];
     return nswData[ rego_code ];
   }
-  else
-  {
+  else {
     return null;
   }
 }

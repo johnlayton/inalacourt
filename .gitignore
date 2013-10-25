@@ -1,8 +1,11 @@
 dist/*
-data/*
 node_modules/*
+data/reports/*
+
 santa*
+
 inalacourt.sh
 go.sh
+
 .idea/*
 *.iml

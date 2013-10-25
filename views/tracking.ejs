@@ -74,6 +74,8 @@
         return L.dynaIcon ( { markers : t.markers, data : data } )
       };
 
+      L.geoJson.ajax ( c + 'incidents', { } ).addTo ( map );
+
       var layer = L.layerGroup ( [] );
 
       var assets = {};
@@ -82,10 +84,9 @@
         var position = L.latLng (
             data.position.coords.latitude,
             data.position.coords.longitude );
-        console.log( data );
         if ( !assets[data.identity] ) {
           assets[data.identity] = L.dynaMarker ( position, {
-            icon  : create_icon ( data ),
+            icon : create_icon ( data ),
             title : title ( data ),
             track : L.geoJson.ajax ( c + 'details' + '/' + data.identity + '?type=linestring', { } )
           } );
@@ -93,11 +94,11 @@
           assets[data.identity].addTo ( layer );
           assets[data.identity].on ( 'mouseover', function ( e ) {
             //assets[data.identity].openPopup();
-            map.addLayer( e.target.options.track );
+            map.addLayer ( e.target.options.track );
           } );
           assets[data.identity].on ( 'mouseout', function ( e ) {
             //assets[data.identity].closePopup();
-            map.removeLayer( e.target.options.track );
+            map.removeLayer ( e.target.options.track );
           } );
         }
         else {
@@ -115,7 +116,7 @@
                     }
                   } );
                 } );
-            marker.options.track.refresh();
+            marker.options.track.refresh ();
             marker.setIcon ( create_icon ( data ) );
             //marker.bindPopup ( t.properties ( "Details", data.asset ) );
             marker.setLatLng ( position )
@@ -123,6 +124,7 @@
         }
         //} );
       } );
+
 
       L.control.search ( {layer : layer, initial : false} ).addTo ( map );
       L.control.fullscreen ().addTo ( map );
