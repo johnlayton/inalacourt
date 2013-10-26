@@ -73,9 +73,9 @@ var libs = {
     library : './lib/inalacourt.dynamarker.js',
     options : { expose : 'dynamarker' }
   },
-  legend : {
-    library : './lib/inalacourt.legend.js',
-    options : { expose : 'legend' }
+  information : {
+    library : './lib/inalacourt.information.js',
+    options : { expose : 'information' }
   },
   util : {
     library : 'util',
@@ -111,11 +111,11 @@ app.get ( "/incidents", function ( req, res ) {
     .pipe ( res )
 } );
 
-app.get ( "/details/:id", function ( req, res ) {
+app.get ( "/details", function ( req, res ) {
   var agent = req.headers['user-agent'];
   res.set ( "Content-Type", "application/json" );
   database ( "reports" )
-    .list ( req.params.id, ( req.param ( 'hours' ) || 48 ) )
+    .list ( req.param ( 'id' ), ( req.param ( 'hours' ) || 24 ) )
     .pipe ( geojson ( req.param ( 'type' ) || "points" ) )
     .pipe ( oppressor ( req ) )
     .pipe ( res )

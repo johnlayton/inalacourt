@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/dist/leaflet.search.css"/>
 
   <link rel="stylesheet" href="/style/inalacourt.map.css"/>
-  <link rel="stylesheet" href="/style/inalacourt.legend.css"/>
+  <link rel="stylesheet" href="/style/inalacourt.information.css"/>
   <link rel="stylesheet" href="/style/inalacourt.incident.css"/>
   <link rel="stylesheet" href="/style/inalacourt.notifications.css"/>
   <link rel="stylesheet" href="/style/inalacourt.markers.css"/>
@@ -31,7 +31,7 @@
   <% } else { %>
   <% } %>
   <style>
-    .info {
+    .information {
       padding: 6px 8px;
       font: 14px/16px Arial, Helvetica, sans-serif;
       background: white;
@@ -66,14 +66,14 @@
 </head>
 <body>
   <div id="map" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
-  <script src="/browserify/load?libs=util,io,template,notifications,dynamarker,legend"></script>
+  <script src="/browserify/load?libs=util,io,template,notifications,dynamarker,information"></script>
   <script>
     var i = require ( 'socket.io' );
     var t = require ( 'template' );
     var u = require ( 'util' );
     var n = require ( 'notifications' );
     var d = require ( 'dynamarker' );
-    var l = require ( 'legend' );
+    var l = require ( 'information' );
   </script>
   <script>
 
@@ -83,7 +83,7 @@
 
     var map = L.map ( 'map', {
       attributionControl : false,
-      legendControl : false
+      informationControl : false
     } ).setView ( [-37.8, 144.9], 5 );
 
     L.control.scale ( { imperial : false } ).addTo ( map );
@@ -111,30 +111,51 @@
       return L.dynaIcon ( { markers : t.markers, data : data } )
     };
 
-    var legend = L.control.legend ( { template : t } ).addTo ( map );
-    legend.update ( "incident", { title : "hello world" } );
+    var information = L.control.information ( { template : t } ).addTo ( map );
+    information.update ( "incident", { title : "Information Panel" } );
 
     function highlightFeature ( layer ) {
       return function highlightFeature ( e ) {
-        legend.update ( "incident", layer.properties );
+        information.update ( "incident", layer.properties );
       }
     }
 
     function resetHighlight ( e ) {
-      legend.update ();
+      information.update ();
     }
 
-    function onEachFeature ( feature, layer ) {
+    var eachFeature = function ( feature, layer ) {
       layer.on ( {
-        //mouseover : highlightFeature ( feature ),
-        //mouseout : resetHighlight,
-        click : highlightFeature ( feature )
+        mouseover : highlightFeature ( feature ),
+        mouseout : resetHighlight
+        //click : highlightFeature ( feature )
       } );
-    }
+    };
+
+    var color = function ( status ) {
+      var statuses = {
+        'out_of_control' : 'red',
+        'being_controlled' : 'grey',
+        'under_control' : 'lightgreen'
+      };
+      return statuses[status] || 'black';
+    };
+
+    var style = function ( feature ) {
+      var status = ( feature.properties['STATUS'] || "Unknown" ).toLocaleLowerCase ().replace ( /\ /g, '_' );
+      return {
+        fillColor : color ( status ),
+        weight : 2,
+        opacity : 1,
+        color : 'black',
+        dashArray : '3',
+        fillOpacity : 0.7
+      };
+    };
 
     L.geoJson.ajax ( '/incidents', {
-      //style : function(){},
-      onEachFeature : onEachFeature
+      style : style,
+      onEachFeature : eachFeature
     } ).addTo ( map );
 
     var layer = L.layerGroup ( [] );
@@ -146,30 +167,21 @@
       var position = L.latLng (
           data.position.coords.latitude,
           data.position.coords.longitude );
-
-      //var marker = assets[data.identity] = assets[data.identity] || L.dynaMarker ( position, {
-      //  icon : create_icon ( data ),
-      //  title : title ( data ),
-      //  track : L.geoJson.ajax ( c + 'details' + '/' + data.identity + '?type=linestring', { } )
-      //} );
-      //marker.bindPopup ( t.properties ( "Details", data.asset ) );
-      //marker.addTo ( layer );
-
       if ( !assets[data.identity] ) {
         marker = L.dynaMarker ( position, {
           icon : create_icon ( data ),
-          title : title ( data )//,
+          title : title ( data )
         } );
         marker.addTo ( layer );
         marker.on ( 'mouseover', function ( e ) {
           map.addLayer ( e.target.options.track =
                          e.target.options.track ||
-                         L.geoJson.ajax ( '/details/' + data.identity + '?type=linestring&hours=24', { } ) );
-          legend.update ( "asset", L.extend ( {}, data.asset, data.arena ) );
+                         L.geoJson.ajax ( '/details?id=' + data.identity + '&type=linestring&hours=48', { } ) );
+          information.update ( "asset", L.extend ( {}, data.asset, data.arena ) );
         } );
         marker.on ( 'mouseout', function ( e ) {
           map.removeLayer ( e.target.options.track );
-          legend.update ();
+          information.update ();
         } );
         assets[data.identity] = marker;
       }
@@ -195,7 +207,6 @@
           marker.setLatLng ( position )
         }
       }
-      //} );
     } );
 
     L.control.search ( {layer : layer, initial : false} ).addTo ( map );
