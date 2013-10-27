@@ -11,6 +11,7 @@
 
   <link rel="stylesheet" href="/style/inalacourt.map.css"/>
   <link rel="stylesheet" href="/style/inalacourt.information.css"/>
+  <link rel="stylesheet" href="/style/inalacourt.flyover.css"/>
   <link rel="stylesheet" href="/style/inalacourt.incident.css"/>
   <link rel="stylesheet" href="/style/inalacourt.notifications.css"/>
   <link rel="stylesheet" href="/style/inalacourt.markers.css"/>
@@ -63,9 +64,31 @@
       text-transform: capitalize;
     }
   </style>
+
 </head>
 <body>
   <div id="map" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
+  <div id="flyover" class="leaflet-control-flyover closed" style="position: absolute; z-index: 5000; top: 0; right: 0; height: 100%;">
+    <span id="flyover-toggle" style="cursor: pointer;" onclick="inalacourt_toggleFlyover();">&lt;</span>
+  </div>
+
+  <script>
+    function inalacourt_toggleFlyover(){
+      var flyover = L.DomUtil.get( 'flyover' );
+      var map = L.DomUtil.get( 'map' );
+      if( L.DomUtil.hasClass( flyover, 'open' ) )
+      {
+        L.DomUtil.removeClass( flyover, 'open' );
+        L.DomUtil.removeClass( map, 'flyover-open' );
+      }
+      else
+      {
+        L.DomUtil.addClass( flyover, 'open' );
+        L.DomUtil.addClass( map, 'flyover-open' );
+      }
+    }
+  </script>
+
   <script src="/browserify/load?libs=util,io,template,notifications,dynamarker,information"></script>
   <script>
     var i = require ( 'socket.io' );

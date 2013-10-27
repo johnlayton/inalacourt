@@ -1,0 +1,18 @@
+.leaflet-control-flyover {
+  background: #DDD;
+  width: 10px;
+  padding: 0;
+}
+
+.leaflet-control-flyover.open {
+  padding-left: 5px;
+  width: 200px;
+}
+
+#map .leaflet-right {
+  margin-right: 10px;
+}
+
+#map.flyover-open .leaflet-right {
+  margin-right: 205px;
+}
