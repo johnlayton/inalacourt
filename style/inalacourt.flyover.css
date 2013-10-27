@@ -9,6 +9,14 @@
   width: 200px;
 }
 
+.flyover #flyover-content {
+  width: 0;
+}
+
+.flyover.open #flyover-content {
+  width: 100%;
+}
+
 #map .leaflet-right {
   margin-right: 10px;
 }

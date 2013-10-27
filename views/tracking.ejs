@@ -69,11 +69,12 @@
 <body>
   <div id="map" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
   <div id="flyover" class="flyover" style="position: absolute; z-index: 5000; top: 0; right: 0; height: 100%;">
-    <span id="flyover-toggle" style="cursor: pointer;" onclick="inalacourt_toggleFlyover();">&lt;</span>
+    <span id="flyover-toggle" style="cursor: pointer;" onclick="toggleFlyover();">&lt;</span>
+    <div id="flyover-content"></div>
   </div>
 
   <script>
-    function inalacourt_toggleFlyover(){
+    function toggleFlyover(){
       var flyover = L.DomUtil.get( 'flyover' );
       var map = L.DomUtil.get( 'map' );
       if( L.DomUtil.hasClass( flyover, 'open' ) )
@@ -86,6 +87,26 @@
         L.DomUtil.addClass( flyover, 'open' );
         L.DomUtil.addClass( map, 'flyover-open' );
       }
+    }
+
+    function updateFlyover( inBoundAssets )
+    {
+      var a;
+      var callsign;
+      var list = [];
+      for ( var key in inBoundAssets ) {
+        if( !inBoundAssets.hasOwnProperty(key) ) {
+          continue;
+        }
+
+        a = inBoundAssets[key];
+        callsign = (a.arena && a.arena.callsign) ? a.arena.callsign : a.asset.regn;
+        list.push( "<li>"+callsign+"</li>" );
+      }
+      list.sort();
+
+
+      L.DomUtil.get('flyover-content' ).innerHTML = "<ul>"+list.join("")+"</ul>";
     }
   </script>
 
@@ -184,9 +205,12 @@
     var layer = L.layerGroup ( [] );
 
     var assets = {};
+    var bounds = map.getBounds();
+    var inBounds = {};
     var asset = i.connect ( "/asset", { transports : ['websocket'] } );
 
     asset.on ( 'position', function ( data ) {
+      var marker;
       var position = L.latLng (
           data.position.coords.latitude,
           data.position.coords.longitude );
@@ -207,6 +231,8 @@
           information.update ();
         } );
         assets[data.identity] = marker;
+        updateInBounds( data.identity, marker, position );
+        updateFlyover( inBounds );
       }
       else {
         var marker = assets[data.identity];
@@ -228,6 +254,8 @@
           }
           marker.setIcon ( create_icon ( data ) );
           marker.setLatLng ( position )
+          updateInBounds( data.identity, marker, position );
+          updateFlyover( inBounds );
         }
       }
     } );
@@ -235,6 +263,34 @@
     L.control.search ( {layer : layer, initial : false} ).addTo ( map );
     L.control.fullscreen ().addTo ( map );
     L.hash ( map );
+
+    var updateInBounds = function( assetKey, assetMarker, pos )
+    {
+      if( bounds.contains( pos ) ) {
+        inBounds[assetKey] = assetMarker.options.icon.options.data;
+      } else {
+        delete inBounds[assetKey];
+      }
+    }
+
+    var resetBounds = function() {
+      bounds = map.getBounds();
+      var a;
+
+      for ( var key in assets ) {
+        if( !assets.hasOwnProperty(key) ) {
+          continue;
+        }
+
+        a = assets[key];
+        updateInBounds( key, a, a.getLatLng() );
+      }
+
+      updateFlyover( inBounds );
+    };
+
+    map.on( "move", function(){ resetBounds() } );
+    map.on( "zoom", function(){ resetBounds() } );
   </script>
 </body>
 </html>
