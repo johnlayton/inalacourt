@@ -1,10 +1,10 @@
-.leaflet-control-flyover {
+.flyover {
   background: #DDD;
   width: 10px;
   padding: 0;
 }
 
-.leaflet-control-flyover.open {
+.flyover.open {
   padding-left: 5px;
   width: 200px;
 }
