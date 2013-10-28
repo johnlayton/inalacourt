@@ -25,6 +25,8 @@
     "brfs"                 : "*",
     "less-middleware"      : "*",
     "fs-extra"             : "*",
+    "request"              : "*",
+    "JSONStream"           : "*",
     "ncp"                  : "*",
     "level"                : "*",
     "xml-stream"           : "*",

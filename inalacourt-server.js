@@ -3,6 +3,7 @@
 var connect = require ( 'connect' )
   , express = require ( 'express' )
   , fs = require ( 'fs' )
+  , fsx = require ( 'fs-extra' )
   , ejs = require ( 'ejs' )
   , util = require ( 'util' )
   , browser = require ( 'browserify' )
@@ -13,10 +14,12 @@ var connect = require ( 'connect' )
   , colors = require ( 'colors' )
   , brfs = require ( 'brfs' )
   , through = require ( 'through' )
+  , jsonstream = require ( 'JSONStream' )
   , report = require ( './lib/inalacourt.tracplus.js' )
   , geojson = require ( './lib/inalacourt.geojson.js' )
   , database = require ( './lib/inalacourt.database.js' )
   , georss = require ( './lib/inalacourt.georss.js' )
+  , esrijson = require ( './lib/inalacourt.esri2json.js' )
   , nswData = require ( './data/nsw_data.json' );
 
 var app = express ();
@@ -111,11 +114,25 @@ app.get ( "/incidents", function ( req, res ) {
     .pipe ( res )
 } );
 
+app.get ( "/data/:file", function ( req, res ) {
+  var agent = req.headers['user-agent'];
+  res.set ( "Content-Type", "application/json" );
+  var handler = through ( function ( data ) {
+    this.queue ( JSON.stringify ( data ) );
+  } );
+  handler
+    .pipe ( oppressor ( req ) )
+    .pipe ( res )
+  var file = path.join ( "data", req.param ( 'file' ).toString () + ".json" );
+  handler.write ( esrijson ( fsx.readJsonFileSync ( file ) ) );
+  handler.end ( );
+} );
+
 app.get ( "/details", function ( req, res ) {
   var agent = req.headers['user-agent'];
   res.set ( "Content-Type", "application/json" );
   database ( "reports" )
-    .list ( req.param ( 'id' ), ( req.param ( 'hours' ) || 24 ) )
+    .list ( ( req.param ( 'id' ) || 1 ), ( req.param ( 'hours' ) || 24 ) )
     .pipe ( geojson ( req.param ( 'type' ) || "points" ) )
     .pipe ( oppressor ( req ) )
     .pipe ( res )
@@ -217,6 +234,11 @@ setInterval ( function () {
     }
   } );
 }, 10000 );
+
+/*
+ Regions -> https://emap.dse.vic.gov.au/ArcGIS/rest/services/boundaries/MapServer/2/query?returnGeometry=true&spatialRel=esriSpatialRelIntersects&where=1+%3d+1&outSR=4326&outFields=*&f=json&
+ Burns   -> https://emap.dse.vic.gov.au/ArcGIS/rest/services/phoenix/MapServer/1/query?returnGeometry=true&spatialRel=esriSpatialRelIntersects&where=1+%3d+1&outSR=4326&outFields=*&f=json&
+ */
 
 /**
  * Show red error message in console

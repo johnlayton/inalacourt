@@ -11,7 +11,6 @@
 
   <link rel="stylesheet" href="/style/inalacourt.map.css"/>
   <link rel="stylesheet" href="/style/inalacourt.information.css"/>
-  <link rel="stylesheet" href="/style/inalacourt.flyover.css"/>
   <link rel="stylesheet" href="/style/inalacourt.incident.css"/>
   <link rel="stylesheet" href="/style/inalacourt.notifications.css"/>
   <link rel="stylesheet" href="/style/inalacourt.markers.css"/>
@@ -197,7 +196,19 @@
       };
     };
 
+    var panTo = function () {
+      map.panTo ( marker.getLatLng (), {
+        pan : { animate : true },
+        zoom : { animate : true }
+      } );
+    };
+
     L.geoJson.ajax ( '/incidents', {
+      style : style,
+      onEachFeature : eachFeature
+    } ).addTo ( map );
+
+    L.geoJson.ajax ( '/data/burns', {
       style : style,
       onEachFeature : eachFeature
     } ).addTo ( map );
@@ -238,17 +249,9 @@
         var marker = assets[data.identity];
         if ( marker.getLatLng ().lat != position.lat ||
              marker.getLatLng ().lng != position.lng ) {
-          map.notification ( icon ( data ), title ( data ), message ( marker.getLatLng (), position ), null, null,
-              function () {
-                map.panTo ( marker.getLatLng (), {
-                  pan : {
-                    animate : true
-                  },
-                  zoom : {
-                    animate : true
-                  }
-                } );
-              } );
+          map.notification ( icon ( data ), title ( data ),
+              message ( marker.getLatLng (), position ), null, null,
+              panTo );
           if ( marker.options.track ) {
             marker.options.track.refresh ();
           }
