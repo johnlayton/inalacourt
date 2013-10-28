@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/dist/leaflet.search.css"/>
 
   <link rel="stylesheet" href="/style/inalacourt.map.css"/>
+  <link rel="stylesheet" href="/style/inalacourt.flyover.css"/>
   <link rel="stylesheet" href="/style/inalacourt.information.css"/>
   <link rel="stylesheet" href="/style/inalacourt.incident.css"/>
   <link rel="stylesheet" href="/style/inalacourt.notifications.css"/>
@@ -164,7 +165,7 @@
     }
 
     function resetHighlight ( e ) {
-      information.update ();
+      information.update ( "incident", { title : "Information Panel" } );
     }
 
     var eachFeature = function ( feature, layer ) {
@@ -239,7 +240,7 @@
         } );
         marker.on ( 'mouseout', function ( e ) {
           map.removeLayer ( e.target.options.track );
-          information.update ();
+          information.update ( "incident", { title : "Information Panel" } );
         } );
         assets[data.identity] = marker;
         updateInBounds( data.identity, marker, position );
