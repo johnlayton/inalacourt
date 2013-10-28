@@ -4,7 +4,7 @@
   padding: 0;
 }
 
-.flyover.open {
+#body.flyover-open #flyover {
   padding-left: 5px;
   width: 200px;
 }
@@ -13,14 +13,14 @@
   width: 0;
 }
 
-.flyover.open #flyover-content {
+#body.flyover-open #flyover-content {
   width: 100%;
 }
 
-#map .leaflet-right {
+#body .leaflet-right {
   margin-right: 10px;
 }
 
-#map.flyover-open .leaflet-right {
+#body.flyover-open .leaflet-right {
   margin-right: 205px;
 }
