@@ -76,6 +76,10 @@ var libs = {
     library : './lib/inalacourt.dynamarker.js',
     options : { expose : 'dynamarker' }
   },
+  clusters : {
+    library : './lib/inalacourt.clusters.js',
+    options : { expose : 'clusters' }
+  },
   information : {
     library : './lib/inalacourt.information.js',
     options : { expose : 'information' }
@@ -223,6 +227,7 @@ setInterval ( function () {
     username : process.env.GATEWAY_USERNAME || "username",
     password : process.env.GATEWAY_PASSWORD || "password"
   };
+  debug( "Report", util.inspect( identity ) );
   report ( identity, function ( err, item ) {
     if ( err ) {
       error ( "Report", err );
