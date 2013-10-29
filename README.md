@@ -5,7 +5,6 @@ Setup
 -----
 
 1. Directory structure
-```
 ~
 └── Development
     ├── home
@@ -20,7 +19,6 @@ Setup
         |   ├── Leaflet.hash
         |   └── Leaflet.markercluster
         └── wax
-```
 
 1(a). My leaflet mr config file (.mrconfig)
 ```
