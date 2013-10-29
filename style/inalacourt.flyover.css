@@ -1,26 +1,47 @@
-.flyover {
-  background: #DDD;
-  width: 10px;
-  padding: 0;
+/* flyover control */
+.leaflet-control-flyover {
+  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.4);
+  background: #f8f8f9;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
-#body.flyover-open #flyover {
-  padding-left: 5px;
-  width: 200px;
+.leaflet-control-flyover .leaflet-control-flyover-list {
+  display: none;
 }
 
-.flyover #flyover-content {
-  width: 0;
+.leaflet-control-flyover-expanded .leaflet-control-flyover-list {
+  display: block;
+  position: relative;
 }
 
-#body.flyover-open #flyover-content {
-  width: 100%;
+.leaflet-control-flyover-expanded .leaflet-control-flyover-list a {
+  display: block;
+  position: relative;
+  clear: both;
 }
 
-#body .leaflet-right {
-  margin-right: 10px;
+.leaflet-control-flyover-expanded {
+  padding: 6px 10px 6px 6px;
+  color: #333;
+  background: #fff;
 }
 
-#body.flyover-open .leaflet-right {
-  margin-right: 205px;
+.leaflet-touch .leaflet-control-attribution,
+.leaflet-touch .leaflet-control-flyover,
+.leaflet-touch .leaflet-bar {
+  box-shadow: none;
+}
+
+.leaflet-touch .leaflet-control-flyover,
+.leaflet-touch .leaflet-bar {
+  border: 4px solid rgba(0, 0, 0, 0.3);
+}
+
+.leaflet-control-flyover-toggle {
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  display: block;
 }

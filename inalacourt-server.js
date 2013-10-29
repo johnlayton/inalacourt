@@ -76,6 +76,10 @@ var libs = {
     library : './lib/inalacourt.dynamarker.js',
     options : { expose : 'dynamarker' }
   },
+  flyover : {
+    library : './lib/inalacourt.flyover.js',
+    options : { expose : 'flyover' }
+  },
   information : {
     library : './lib/inalacourt.information.js',
     options : { expose : 'information' }
@@ -125,7 +129,7 @@ app.get ( "/data/:file", function ( req, res ) {
     .pipe ( res )
   var file = path.join ( "data", req.param ( 'file' ).toString () + ".json" );
   handler.write ( esrijson ( fsx.readJsonFileSync ( file ) ) );
-  handler.end ( );
+  handler.end ();
 } );
 
 app.get ( "/details", function ( req, res ) {
@@ -234,11 +238,6 @@ setInterval ( function () {
     }
   } );
 }, 10000 );
-
-/*
- Regions -> https://emap.dse.vic.gov.au/ArcGIS/rest/services/boundaries/MapServer/2/query?returnGeometry=true&spatialRel=esriSpatialRelIntersects&where=1+%3d+1&outSR=4326&outFields=*&f=json&
- Burns   -> https://emap.dse.vic.gov.au/ArcGIS/rest/services/phoenix/MapServer/1/query?returnGeometry=true&spatialRel=esriSpatialRelIntersects&where=1+%3d+1&outSR=4326&outFields=*&f=json&
- */
 
 /**
  * Show red error message in console

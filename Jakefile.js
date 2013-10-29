@@ -15,6 +15,8 @@ var paths = {
       dest : 'dist' },
     { src : path.join ( leaf, 'Leaflet.ajax/dist' ),
       dest : 'dist' },
+    { src : path.join ( leaf, 'Leaflet.plugins/layer/tile/Google.js' ),
+      dest : 'dist/leaflet.google.js' },
     { src : path.join ( leaf, 'Leaflet.pip/leaflet-pip.js' ),
       dest : 'dist/leaflet.pip.js' },
     { src : path.join ( leaf, 'Leaflet.fullscreen/Control.Fullscreen.js' ),

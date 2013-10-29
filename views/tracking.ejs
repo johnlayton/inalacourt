@@ -68,46 +68,7 @@
 </head>
 <body id="body">
   <div id="map" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
-  <div id="flyover" class="flyover" style="position: absolute; z-index: 5000; top: 0; right: 0; height: 100%;">
-    <span id="flyover-toggle" style="cursor: pointer;" onclick="toggleFlyover();">&lt;</span>
-    <div id="flyover-content"></div>
-  </div>
-
-  <script>
-    function toggleFlyover(){
-      var body = L.DomUtil.get( 'body' );
-      if( L.DomUtil.hasClass( body, 'flyover-open' ) )
-      {
-        L.DomUtil.removeClass( body, 'flyover-open' );
-      }
-      else
-      {
-        L.DomUtil.addClass( body, 'flyover-open' );
-      }
-    }
-
-    function updateFlyover( inBoundAssets )
-    {
-      var a;
-      var callsign;
-      var list = [];
-      for ( var key in inBoundAssets ) {
-        if( !inBoundAssets.hasOwnProperty(key) ) {
-          continue;
-        }
-
-        a = inBoundAssets[key];
-        callsign = (a.arena && a.arena.callsign) ? a.arena.callsign : a.asset.regn;
-        list.push( "<li>"+callsign+"</li>" );
-      }
-      list.sort();
-
-
-      L.DomUtil.get('flyover-content' ).innerHTML = "<ul>"+list.join("")+"</ul>";
-    }
-  </script>
-
-  <script src="/browserify/load?libs=util,io,template,notifications,dynamarker,information"></script>
+  <script src="/browserify/load?libs=util,io,template,notifications,dynamarker,information,flyover"></script>
   <script>
     var i = require ( 'socket.io' );
     var t = require ( 'template' );
@@ -115,9 +76,9 @@
     var n = require ( 'notifications' );
     var d = require ( 'dynamarker' );
     var l = require ( 'information' );
+    var f = require ( 'flyover' );
   </script>
   <script>
-
     var b = "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/";
     var f = '/{z}/{x}/{y}.png';
     var g = '/{z}/{y}/{x}.png';
@@ -214,10 +175,8 @@
     var layer = L.layerGroup ( [] );
 
     var assets = {};
-    var bounds = map.getBounds();
-    var inBounds = {};
-    var asset = i.connect ( "/asset", { transports : ['websocket'] } );
 
+    var asset = i.connect ( "/asset", { transports : ['websocket'] } );
     asset.on ( 'position', function ( data ) {
       var marker;
       var position = L.latLng (
@@ -240,8 +199,6 @@
           information.update ( "incident", { title : "Information Panel" } );
         } );
         assets[data.identity] = marker;
-        updateInBounds( data.identity, marker, position );
-        updateFlyover( inBounds );
       }
       else {
         var marker = assets[data.identity];
@@ -255,43 +212,14 @@
           }
           marker.setIcon ( create_icon ( data ) );
           marker.setLatLng ( position )
-          updateInBounds( data.identity, marker, position );
-          updateFlyover( inBounds );
         }
       }
     } );
 
-    L.control.search ( {layer : layer, initial : false} ).addTo ( map );
+    L.control.flyover ( { layer : layer } ).addTo ( map );
+    L.control.search ( { layer : layer, initial : false} ).addTo ( map );
     L.control.fullscreen ().addTo ( map );
     L.hash ( map );
-
-    var updateInBounds = function( assetKey, assetMarker, pos )
-    {
-      if( bounds.contains( pos ) ) {
-        inBounds[assetKey] = assetMarker.options.icon.options.data;
-      } else {
-        delete inBounds[assetKey];
-      }
-    }
-
-    var resetBounds = function() {
-      bounds = map.getBounds();
-      var a;
-
-      for ( var key in assets ) {
-        if( !assets.hasOwnProperty(key) ) {
-          continue;
-        }
-
-        a = assets[key];
-        updateInBounds( key, a, a.getLatLng() );
-      }
-
-      updateFlyover( inBounds );
-    };
-
-    map.on( "move", function(){ resetBounds() } );
-    map.on( "zoom", function(){ resetBounds() } );
   </script>
 </body>
 </html>
