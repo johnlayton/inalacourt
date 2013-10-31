@@ -80,6 +80,10 @@ var libs = {
     library : './lib/inalacourt.information.js',
     options : { expose : 'information' }
   },
+  angular : {
+    library : './lib/inalacourt.angular.js',
+    options : { expose : 'angular' }
+  },
   util : {
     library : 'util',
     options : { expose : 'util' }
@@ -91,8 +95,24 @@ var libs = {
  */
 app.get ( "/", function ( req, res ) {
   var agent = req.headers['user-agent'];
-  res.render ( 'tracking', {
-    title : 'Tracking',
+  res.render ( 'index', {
+    title : 'NAFC Aircraft Tracking',
+    agent : agent
+  } );
+} );
+
+app.get ( "/nafc/overview", function ( req, res ) {
+  var agent = req.headers['user-agent'];
+  res.render ( 'overview', {
+    title : 'NAFC Aircraft Tracking',
+    agent : agent
+  } );
+} );
+
+app.get ( "/nafc/incidents", function ( req, res ) {
+  var agent = req.headers['user-agent'];
+  res.render ( 'incidents', {
+    title : 'NAFC Aircraft Tracking',
     agent : agent
   } );
 } );
@@ -125,7 +145,7 @@ app.get ( "/data/:file", function ( req, res ) {
     .pipe ( res )
   var file = path.join ( "data", req.param ( 'file' ).toString () + ".json" );
   handler.write ( esrijson ( fsx.readJsonFileSync ( file ) ) );
-  handler.end ( );
+  handler.end ();
 } );
 
 app.get ( "/details", function ( req, res ) {
@@ -138,7 +158,7 @@ app.get ( "/details", function ( req, res ) {
     .pipe ( res )
 } );
 
-app.get ( "/browserify/load", function ( req, res ) {
+app.get ( "/browserify.js", function ( req, res ) {
   res.set ( "Content-Type", "application/javascript" );
   underscore.inject ( req.param ( 'libs' ) ? req.param ( 'libs' ).split ( ',' ) : underscore.keys ( libs ),
     function ( b, include ) {

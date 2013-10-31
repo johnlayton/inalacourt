@@ -5,9 +5,9 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 
-  <link rel="stylesheet" href="/dist/leaflet.css"/>
-  <link rel="stylesheet" href="/dist/leaflet.fullscreen.css"/>
-  <link rel="stylesheet" href="/dist/leaflet.search.css"/>
+  <link rel="stylesheet" href="/dist/leaflet/leaflet.css"/>
+  <link rel="stylesheet" href="/dist/leaflet/leaflet.fullscreen.css"/>
+  <link rel="stylesheet" href="/dist/leaflet/leaflet.search.css"/>
 
   <link rel="stylesheet" href="/style/inalacourt.map.css"/>
   <link rel="stylesheet" href="/style/inalacourt.flyover.css"/>
@@ -18,14 +18,14 @@
   <link rel="stylesheet" href="/style/inalacourt.platform.css"/>
 
   <!--[if lte IE 8]>
-  <link rel="stylesheet" href="/dist/leaflet.ie.css"/>
+  <link rel="stylesheet" href="/dist/leaflet/leaflet.ie.css"/>
   <![endif]-->
 
-  <script src="/dist/leaflet-src.js"></script>
-  <script src="/dist/leaflet.fullscreen.js"></script>
-  <script src="/dist/leaflet.hash.js"></script>
-  <script src="/dist/leaflet.search.js"></script>
-  <script src="/dist/leaflet.ajax.js"></script>
+  <script src="/dist/leaflet/leaflet-src.js"></script>
+  <script src="/dist/leaflet/leaflet.fullscreen.js"></script>
+  <script src="/dist/leaflet/leaflet.hash.js"></script>
+  <script src="/dist/leaflet/leaflet.search.js"></script>
+  <script src="/dist/leaflet/leaflet.ajax.js"></script>
 
   <% if ( agent.indexOf( 'Mobile' ) > 0 ) {%>
   <script src="/dist/cordova-2.3.0.js"></script>
@@ -107,7 +107,7 @@
     }
   </script>
 
-  <script src="/browserify/load?libs=util,io,template,notifications,dynamarker,information"></script>
+  <script src="/browserify.js?libs=util,io,template,notifications,dynamarker,information"></script>
   <script>
     var i = require ( 'socket.io' );
     var t = require ( 'template' );
