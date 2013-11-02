@@ -18,6 +18,8 @@ var connect = require ( 'connect' )
   , report = require ( './lib/inalacourt.tracplus.js' )
   , geojson = require ( './lib/inalacourt.geojson.js' )
   , database = require ( './lib/inalacourt.database.js' )
+  , emap = require ( './lib/inalacourt.emap.js' )
+  , emap_tiles = require ( './lib/inalacourt.emap.tiles.js' )
   , georss = require ( './lib/inalacourt.georss.js' )
   , esrijson = require ( './lib/inalacourt.esri2json.js' )
   , nswData = require ( './data/nsw_data.json' );
@@ -80,9 +82,25 @@ var libs = {
     library : './lib/inalacourt.information.js',
     options : { expose : 'information' }
   },
-  angular : {
-    library : './lib/inalacourt.angular.js',
-    options : { expose : 'angular' }
+  application : {
+    library : './lib/inalacourt.angular.application.js',
+    options : { expose : 'application' }
+  },
+  incident : {
+    library : './lib/inalacourt.angular.incident.js',
+    options : { expose : 'incident' }
+  },
+  overview : {
+    library : './lib/inalacourt.angular.overview.js',
+    options : { expose : 'overview' }
+  },
+  terrain : {
+    library : './lib/inalacourt.angular.terrain.js',
+    options : { expose : 'terrain' }
+  },
+  victoria : {
+    library : './lib/inalacourt.angular.victoria.js',
+    options : { expose : 'victoria' }
   },
   util : {
     library : 'util',
@@ -95,8 +113,16 @@ var libs = {
  */
 app.get ( "/", function ( req, res ) {
   var agent = req.headers['user-agent'];
-  res.render ( 'index', {
+  res.render ( 'application', {
     title : 'NAFC Aircraft Tracking',
+    agent : agent
+  } );
+} );
+
+app.get ( "/nafc/summary", function ( req, res ) {
+  var agent = req.headers['user-agent'];
+  res.render ( 'summary', {
+    title : 'NAFC Overview',
     agent : agent
   } );
 } );
@@ -104,15 +130,31 @@ app.get ( "/", function ( req, res ) {
 app.get ( "/nafc/overview", function ( req, res ) {
   var agent = req.headers['user-agent'];
   res.render ( 'overview', {
-    title : 'NAFC Aircraft Tracking',
+    title : 'NAFC Overview',
     agent : agent
   } );
 } );
 
-app.get ( "/nafc/incidents", function ( req, res ) {
+app.get ( "/nafc/terrain", function ( req, res ) {
   var agent = req.headers['user-agent'];
-  res.render ( 'incidents', {
-    title : 'NAFC Aircraft Tracking',
+  res.render ( 'terrain', {
+    title : 'NAFC Terrain',
+    agent : agent
+  } );
+} );
+
+app.get ( "/nafc/incident", function ( req, res ) {
+  var agent = req.headers['user-agent'];
+  res.render ( 'incident', {
+    title : 'NAFC Incident Monitoring',
+    agent : agent
+  } );
+} );
+
+app.get ( "/nafc/victoria", function ( req, res ) {
+  var agent = req.headers['user-agent'];
+  res.render ( 'victoria', {
+    title : 'NAFC State Regional Boundaries',
     agent : agent
   } );
 } );
@@ -134,7 +176,7 @@ app.get ( "/incidents", function ( req, res ) {
     .pipe ( res )
 } );
 
-app.get ( "/data/:file", function ( req, res ) {
+app.get ( "/regions", function ( req, res ) {
   var agent = req.headers['user-agent'];
   res.set ( "Content-Type", "application/json" );
   var handler = through ( function ( data ) {
@@ -143,7 +185,8 @@ app.get ( "/data/:file", function ( req, res ) {
   handler
     .pipe ( oppressor ( req ) )
     .pipe ( res )
-  var file = path.join ( "data", req.param ( 'file' ).toString () + ".json" );
+  //var file = path.join ( "data", req.param ( 'file' ).toString () + ".json" );
+  var file = path.join ( "data", "regions.json" );
   handler.write ( esrijson ( fsx.readJsonFileSync ( file ) ) );
   handler.end ();
 } );
@@ -175,6 +218,8 @@ app.get ( "/browserify.js", function ( req, res ) {
     .pipe ( oppressor ( req ) )
     .pipe ( res )
 } );
+
+emap_tiles( app );
 
 /*
  Create Server
@@ -256,6 +301,9 @@ setInterval ( function () {
 }, 10000 );
 
 /*
+ https://emap.dse.vic.gov.au/ArcGIS/rest/services/boundaries/MapServer/2/query?where=OBJECTID+%3E+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=pjson
+            https://emap.dse.vic.gov.au/arcgis/rest/services/incidents/MapServer/0/query?where=OBJECTID+%3E+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=pjson
+            https://emap.dse.vic.gov.au/arcgis/rest/services/todays_incidents/MapServer/0/query?where=OBJECTID+%3E+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=pjson
  Regions -> https://emap.dse.vic.gov.au/ArcGIS/rest/services/boundaries/MapServer/2/query?returnGeometry=true&spatialRel=esriSpatialRelIntersects&where=1+%3d+1&outSR=4326&outFields=*&f=json&
  Burns   -> https://emap.dse.vic.gov.au/ArcGIS/rest/services/phoenix/MapServer/1/query?returnGeometry=true&spatialRel=esriSpatialRelIntersects&where=1+%3d+1&outSR=4326&outFields=*&f=json&
  */

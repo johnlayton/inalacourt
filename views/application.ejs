@@ -20,13 +20,17 @@
     <script src="/dist/components/angular-route/angular-route.js"></script>
     <script src="/dist/components/angular-leaflet-directive/src/angular-leaflet-directive.js"></script>
 
-    <script src="/browserify.js?libs=util,angular"></script>
+    <script src="/browserify.js?libs=util,application,incident,overview,terrain,victoria"></script>
     <script>
-      var app = require ( "angular" );
+      var i = require ( "overview" )( angular );
+      var o = require ( "incident" )( angular );
+      var t = require ( "terrain" )( angular );
+      var v = require ( "victoria" )( angular );
+      var a = require ( "application" )( angular );
     </script>
 
     <style>
-      .content .angular-leaflet-map {
+      .angular-leaflet-map {
         height: 400px;
         border: 4px #fff solid;
         margin-bottom: 20px;
@@ -39,11 +43,13 @@
     <div class="container">
       <header class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
-          <a href="#!/" class="navbar-brand">NAFC Aircraft Tracking</a>
+          <a href="/" class="navbar-brand">NAFC Aircraft Tracking</a>
         </div>
         <ul class="nav navbar-nav navbar-right">
-          <li ng-class="{ active: activeTab == 'overview' || activeTab == '' }"><a href="#!/overview">Overview</a></li>
-          <li ng-class="{ active: activeTab == 'incidents' }"><a ng-href="#!/incidents">Incidents</a></li>
+          <li ng-class="{ active: activeTab == 'overview' }"><a ng-href="#!/overview">Overview</a></li>
+          <li ng-class="{ active: activeTab == 'incident' }"><a ng-href="#!/incident">Incidents</a></li>
+          <li ng-class="{ active: activeTab == 'victoria' }"><a ng-href="#!/victoria">Victoria</a></li>
+          <li ng-class="{ active: activeTab == 'terrain'  }"><a ng-href="#!/terrain">Terrain</a></li>
         </ul>
       </header>
     </div>
