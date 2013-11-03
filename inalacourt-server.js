@@ -82,6 +82,10 @@ var libs = {
     library : './lib/inalacourt.information.js',
     options : { expose : 'information' }
   },
+  directives : {
+    library : './lib/inalacourt.angular.directives.js',
+    options : { expose : 'directives' }
+  },
   application : {
     library : './lib/inalacourt.angular.application.js',
     options : { expose : 'application' }
@@ -201,6 +205,9 @@ app.get ( "/details", function ( req, res ) {
     .pipe ( res )
 } );
 
+//emap_data( app );
+emap_tiles( app );
+
 app.get ( "/browserify.js", function ( req, res ) {
   res.set ( "Content-Type", "application/javascript" );
   underscore.inject ( req.param ( 'libs' ) ? req.param ( 'libs' ).split ( ',' ) : underscore.keys ( libs ),
@@ -218,8 +225,6 @@ app.get ( "/browserify.js", function ( req, res ) {
     .pipe ( oppressor ( req ) )
     .pipe ( res )
 } );
-
-emap_tiles( app );
 
 /*
  Create Server

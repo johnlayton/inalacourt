@@ -6,22 +6,31 @@
     <link rel="stylesheet" href="/dist/components/bootstrap/dist/css/bootstrap-theme.css"/>
 
     <link rel="stylesheet" href="/dist/leaflet/leaflet.css"/>
-
     <!--[if lte IE 8]>
     <link rel="stylesheet" href="/dist/leaflet/leaflet.ie.css"/>
     <![endif]-->
+    <script src="/dist/leaflet/leaflet-src.js"></script>
+
+
+    <link rel="stylesheet" href="/dist/leaflet/leaflet.fullscreen.css"/>
+    <script src="/dist/leaflet/leaflet.fullscreen.js"></script>
+
+    <!--
+    <link rel="stylesheet" href="/dist/leaflet/leaflet.fullscreen.css"/>
+    <script src="/dist/leaflet/leaflet.fullscreen.js"></script>
+    -->
 
     <script src="/dist/components/jquery/jquery.js"></script>
     <script src="/dist/components/bootstrap/dist/js/bootstrap.js"></script>
 
-    <script src="/dist/leaflet/leaflet-src.js"></script>
+    <script src="/browserify.js?libs=util,application,incident,overview,terrain,victoria,directives"></script>
 
     <script src="/dist/components/angular/angular.js"></script>
     <script src="/dist/components/angular-route/angular-route.js"></script>
-    <script src="/dist/components/angular-leaflet-directive/src/angular-leaflet-directive.js"></script>
+    <script src="/dist/components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
 
-    <script src="/browserify.js?libs=util,application,incident,overview,terrain,victoria"></script>
     <script>
+      var d = require ( "directives" )( angular );
       var i = require ( "overview" )( angular );
       var o = require ( "incident" )( angular );
       var t = require ( "terrain" )( angular );
