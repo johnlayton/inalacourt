@@ -281,12 +281,26 @@ var lookupNswData = function ( regn ) {
  */
 var io = require ( 'socket.io' ).listen ( server );
 io.set ( 'log level', 1 );
+
 var sockets = io.of ( '/asset' );
-sockets.on ( 'connection', function ( socket ) {
+io.sockets.on ( 'connection', function ( socket ) {
   database ( 'reports' ).latest ( function ( err, itm ) {
     socket.emit ( 'position', extracted ( itm ) );
   } );
 } );
+
+/*
+io.sockets.on('connection', function (socket) {
+  socket.emit('send:name', {
+    name: 'Bob'
+  });
+  setInterval(function () {
+    socket.emit('send:time', {
+      time: (new Date()).toString()
+    });
+  }, 1000);
+});
+*/
 
 setInterval ( function () {
   var identity = {
@@ -299,7 +313,7 @@ setInterval ( function () {
     }
     else {
       database ( 'reports' ).put ( item, function ( err, itm ) {
-        sockets.emit ( 'position', extracted ( itm ) );
+        io.sockets.emit ( 'position', extracted ( itm ) );
       } );
     }
   } );

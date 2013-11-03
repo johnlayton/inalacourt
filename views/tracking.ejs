@@ -216,9 +216,9 @@
     var assets = {};
     var bounds = map.getBounds();
     var inBounds = {};
-    var asset = i.connect ( "/asset", { transports : ['websocket'] } );
+    //var asset = i.connect ( "/asset", { transports : ['websocket'] } );
 
-    asset.on ( 'position', function ( data ) {
+    i.connect().on ( 'position', function ( data ) {
       var marker;
       var position = L.latLng (
           data.position.coords.latitude,

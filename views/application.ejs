@@ -15,24 +15,25 @@
     <link rel="stylesheet" href="/dist/leaflet/leaflet.fullscreen.css"/>
     <script src="/dist/leaflet/leaflet.fullscreen.js"></script>
 
-    <!--
-    <link rel="stylesheet" href="/dist/leaflet/leaflet.fullscreen.css"/>
-    <script src="/dist/leaflet/leaflet.fullscreen.js"></script>
-    -->
     <link rel="stylesheet" href="/style/inalacourt.information.css"/>
     <link rel="stylesheet" href="/style/inalacourt.notifications.css"/>
 
     <script src="/dist/components/jquery/jquery.js"></script>
     <script src="/dist/components/bootstrap/dist/js/bootstrap.js"></script>
 
-    <script src="/browserify.js?libs=util,application,incident,overview,terrain,victoria,directives,information,notifications"></script>
+    <script src="/browserify.js?libs=util,application,io,incident,overview,terrain,victoria,directives,information,notifications"></script>
+
+    <script>
+      var io = require ( "socket.io" );
+    </script>
 
     <script src="/dist/components/angular/angular.js"></script>
     <script src="/dist/components/angular-route/angular-route.js"></script>
     <script src="/dist/components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
+    <script src="/dist/components/angular-socket-io/socket.js"></script>
 
     <script>
-      var z = require ( "information" );
+      var f = require ( "information" );
       var z = require ( "notifications" );
       var d = require ( "directives" )( angular );
       var i = require ( "overview" )( angular );
@@ -72,7 +73,17 @@
       <ng-view></ng-view>
     </div>
 
+    <!--
+    <div class="container content" ng-controller="Position">
+      hello {{ name }}<br/>
+      time {{ time }}
+    </div>
+    -->
+
     <div class="container footer">
+      <span class="pull-right">
+      Produced by <a href="http://www.stocksoftware.com.au">StockSoftware</a>
+      </span>
     </div>
   </body>
 </html>
