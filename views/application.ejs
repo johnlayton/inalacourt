@@ -19,17 +19,21 @@
     <link rel="stylesheet" href="/dist/leaflet/leaflet.fullscreen.css"/>
     <script src="/dist/leaflet/leaflet.fullscreen.js"></script>
     -->
+    <link rel="stylesheet" href="/style/inalacourt.information.css"/>
+    <link rel="stylesheet" href="/style/inalacourt.notifications.css"/>
 
     <script src="/dist/components/jquery/jquery.js"></script>
     <script src="/dist/components/bootstrap/dist/js/bootstrap.js"></script>
 
-    <script src="/browserify.js?libs=util,application,incident,overview,terrain,victoria,directives"></script>
+    <script src="/browserify.js?libs=util,application,incident,overview,terrain,victoria,directives,information,notifications"></script>
 
     <script src="/dist/components/angular/angular.js"></script>
     <script src="/dist/components/angular-route/angular-route.js"></script>
     <script src="/dist/components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
 
     <script>
+      var z = require ( "information" );
+      var z = require ( "notifications" );
       var d = require ( "directives" )( angular );
       var i = require ( "overview" )( angular );
       var o = require ( "incident" )( angular );
@@ -41,6 +45,7 @@
     <style>
       .angular-leaflet-map {
         height: 400px;
+        border: 4px #fff solid;
         border: 4px #fff solid;
         margin-bottom: 20px;
         box-shadow: 0 0 5px -1px rgba(0, 0, 0, 1);

@@ -1,6 +1,8 @@
 <div ng-controller="Overview">
-  <leaflet center="canberra" defaults="defaults" events="events" geojson="geojson" scale="true">
+  <leaflet center="canberra" defaults="defaults" events="events" geojson="geojson" scale="bottomleft">
     <fullscreen position="topleft" />
+    <information position="topright" />
+    <notifications position="topright" />
   </leaflet>
   <form class="form-inline" role="form">
     <div class="form-group">
