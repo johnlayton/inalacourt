@@ -74,6 +74,10 @@ var libs = {
     library : './lib/inalacourt.notifications.js',
     options : { expose : 'notifications' }
   },
+  navigation : {
+    library : './lib/inalacourt.leaflet.navigation.js',
+    options : { expose : 'navigation' }
+  },
   dynamarker : {
     library : './lib/inalacourt.dynamarker.js',
     options : { expose : 'dynamarker' }
@@ -82,21 +86,40 @@ var libs = {
     library : './lib/inalacourt.information.js',
     options : { expose : 'information' }
   },
+
+  extensions : {
+    library : './lib/inalacourt.angular.extensions.js',
+    options : { expose : 'extensions' }
+  },
   directives : {
     library : './lib/inalacourt.angular.directives.js',
     options : { expose : 'directives' }
   },
+  services : {
+    library : './lib/inalacourt.angular.services.js',
+    options : { expose : 'services' }
+  },
+
   application : {
     library : './lib/inalacourt.angular.application.js',
     options : { expose : 'application' }
   },
+
   incident : {
     library : './lib/inalacourt.angular.incident.js',
     options : { expose : 'incident' }
   },
+  broadcast : {
+    library : './lib/inalacourt.angular.broadcast.js',
+    options : { expose : 'broadcast' }
+  },
   overview : {
     library : './lib/inalacourt.angular.overview.js',
     options : { expose : 'overview' }
+  },
+  tracking : {
+    library : './lib/inalacourt.angular.tracking.js',
+    options : { expose : 'tracking' }
   },
   terrain : {
     library : './lib/inalacourt.angular.terrain.js',
@@ -106,6 +129,7 @@ var libs = {
     library : './lib/inalacourt.angular.victoria.js',
     options : { expose : 'victoria' }
   },
+
   util : {
     library : 'util',
     options : { expose : 'util' }
@@ -114,6 +138,10 @@ var libs = {
 
 /*
  Routes
+ */
+
+/*
+ Nafc
  */
 app.get ( "/", function ( req, res ) {
   var agent = req.headers['user-agent'];
@@ -131,10 +159,26 @@ app.get ( "/nafc/summary", function ( req, res ) {
   } );
 } );
 
+app.get ( "/nafc/tracking", function ( req, res ) {
+  var agent = req.headers['user-agent'];
+  res.render ( 'tracking', {
+    title : 'NAFC Tracking',
+    agent : agent
+  } );
+} );
+
 app.get ( "/nafc/overview", function ( req, res ) {
   var agent = req.headers['user-agent'];
   res.render ( 'overview', {
     title : 'NAFC Overview',
+    agent : agent
+  } );
+} );
+
+app.get ( "/nafc/broadcast", function ( req, res ) {
+  var agent = req.headers['user-agent'];
+  res.render ( 'broadcast', {
+    title : 'NAFC Public Information',
     agent : agent
   } );
 } );
@@ -163,14 +207,17 @@ app.get ( "/nafc/victoria", function ( req, res ) {
   } );
 } );
 
-app.get ( "/tracking", function ( req, res ) {
-  var agent = req.headers['user-agent'];
-  res.render ( 'tracking', {
-    title : 'Tracking',
-    agent : agent
-  } );
-} );
+//app.get ( "/tracking", function ( req, res ) {
+//  var agent = req.headers['user-agent'];
+//  res.render ( 'tracking', {
+//    title : 'Tracking',
+//    agent : agent
+//  } );
+//} );
 
+/*
+ Data Feeds
+ */
 app.get ( "/incidents", function ( req, res ) {
   var agent = req.headers['user-agent'];
   res.set ( "Content-Type", "application/json" );
@@ -284,6 +331,7 @@ io.set ( 'log level', 1 );
 
 var sockets = io.of ( '/asset' );
 io.sockets.on ( 'connection', function ( socket ) {
+  debug( "Report from Database", "Blah" );
   database ( 'reports' ).latest ( function ( err, itm ) {
     socket.emit ( 'position', extracted ( itm ) );
   } );
@@ -307,7 +355,9 @@ setInterval ( function () {
     username : process.env.GATEWAY_USERNAME || "username",
     password : process.env.GATEWAY_PASSWORD || "password"
   };
+  debug( "Report", util.inspect( identity ) );
   report ( identity, function ( err, item ) {
+    debug( "On...", util.inspect( item ) );
     if ( err ) {
       error ( "Report", err );
     }

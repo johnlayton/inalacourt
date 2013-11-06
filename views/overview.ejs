@@ -1,8 +1,10 @@
 <div ng-controller="Overview">
-  <leaflet center="canberra" markers="markers" defaults="defaults" events="events" geojson="geojson" scale="bottomleft">
-    <fullscreen position="topleft" />
-    <information position="topright" />
-    <notifications position="topright" />
+  <leaflet center="canberra" defaults="defaults" layer="layers" scale="bottomleft">
+    <!--layers="layers"-->
+    <!--<dyna-markers />-->
+    <!--<fullscreen position="topleft" />-->
+    <!--<information position="topright" />-->
+    <!--<notifications position="topright" />-->
   </leaflet>
   <form class="form-inline" role="form">
     <div class="form-group">

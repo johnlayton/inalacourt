@@ -9,37 +9,62 @@
     <!--[if lte IE 8]>
     <link rel="stylesheet" href="/dist/leaflet/leaflet.ie.css"/>
     <![endif]-->
-    <script src="/dist/leaflet/leaflet-src.js"></script>
 
+    <script src="/dist/leaflet/leaflet-src.js"></script>
+    <script src="/dist/leaflet/leaflet.fullscreen.js"></script>
+    <script src="/dist/leaflet/leaflet.hash.js"></script>
+    <script src="/dist/leaflet/leaflet.search.js"></script>
+    <script src="/dist/leaflet/leaflet.ajax.js"></script>
+
+    <% if ( agent.indexOf( 'Mobile' ) > 0 ) {%>
+    <script src="/dist/cordova-2.3.0.js"></script>
+    <% } else { %>
+    <% } %>
 
     <link rel="stylesheet" href="/dist/leaflet/leaflet.fullscreen.css"/>
-    <script src="/dist/leaflet/leaflet.fullscreen.js"></script>
+    <link rel="stylesheet" href="/dist/leaflet/leaflet.search.css"/>
 
+    <link rel="stylesheet" href="/style/inalacourt.map.css"/>
+    <link rel="stylesheet" href="/style/inalacourt.flyover.css"/>
     <link rel="stylesheet" href="/style/inalacourt.information.css"/>
+    <link rel="stylesheet" href="/style/inalacourt.incident.css"/>
     <link rel="stylesheet" href="/style/inalacourt.notifications.css"/>
+    <link rel="stylesheet" href="/style/inalacourt.markers.css"/>
+    <link rel="stylesheet" href="/style/inalacourt.platform.css"/>
+    <link rel="stylesheet" href="/style/inalacourt.leaflet.navigation.css"/>
 
     <script src="/dist/components/jquery/jquery.js"></script>
     <script src="/dist/components/bootstrap/dist/js/bootstrap.js"></script>
-
-    <script src="/browserify.js?libs=util,application,io,incident,overview,terrain,victoria,directives,information,notifications"></script>
-
-    <script>
-      var io = require ( "socket.io" );
-    </script>
 
     <script src="/dist/components/angular/angular.js"></script>
     <script src="/dist/components/angular-route/angular-route.js"></script>
     <script src="/dist/components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
     <script src="/dist/components/angular-socket-io/socket.js"></script>
 
+    <script src="/browserify.js?libs=util,io,template,information,notifications,navigation,dynamarker,extensions,directives,services,application,incident,overview,tracking,terrain,victoria,broadcast"></script>
+
+    <script>
+      var io = require ( "socket.io" );
+    </script>
+
+
     <script>
       var f = require ( "information" );
       var z = require ( "notifications" );
-      var d = require ( "directives" )( angular );
+      var n = require ( "navigation" );
+      var m = require ( "dynamarker" );
+      var t = require ( 'template' );
+      var u = require ( 'util' );
+
+      var e = require ( "extensions" )( angular );
+      var b = require ( "directives" )( angular );
+      var d = require ( "services" )( angular );
       var i = require ( "overview" )( angular );
       var o = require ( "incident" )( angular );
-      var t = require ( "terrain" )( angular );
+      var r = require ( "terrain" )( angular );
       var v = require ( "victoria" )( angular );
+      var y = require ( "broadcast" )( angular );
+      var k = require ( "tracking" )( angular );
       var a = require ( "application" )( angular );
     </script>
 
@@ -61,9 +86,11 @@
           <a href="/" class="navbar-brand">NAFC Aircraft Tracking</a>
         </div>
         <ul class="nav navbar-nav navbar-right">
+          <li ng-class="{ active: activeTab == 'tracking' }"><a ng-href="#!/tracking">Tracking</a></li>
           <li ng-class="{ active: activeTab == 'overview' }"><a ng-href="#!/overview">Overview</a></li>
           <li ng-class="{ active: activeTab == 'incident' }"><a ng-href="#!/incident">Incidents</a></li>
           <li ng-class="{ active: activeTab == 'victoria' }"><a ng-href="#!/victoria">Victoria</a></li>
+          <li ng-class="{ active: activeTab == 'broadcast' }"><a ng-href="#!/broadcast">Broadcast</a></li>
           <li ng-class="{ active: activeTab == 'terrain'  }"><a ng-href="#!/terrain">Terrain</a></li>
         </ul>
       </header>
