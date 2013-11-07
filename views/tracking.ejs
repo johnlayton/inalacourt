@@ -13,6 +13,14 @@
     padding: 0;
   }
 
+  .rotate {
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+  }
+
   #container.flyover-open #flyover {
     padding-left: 5px;
     width: 200px;
@@ -35,9 +43,10 @@
   }
 </style>
 <div id="container" ng-controller="Tracking">
-  <div id="flyover" class="flyover" style="position: relative; z-index: 5000; top: 0; right: 0; height: 100%;">
-    <span id="flyover-toggle" style="cursor: pointer;" ng-click="toggleFlyover()">&lt;</span>
-    <div id="flyover-content"></div>
-  </div>
-  <leaflet center="melbourne" defaults="defaults" layers="layers"></leaflet>
+  <leaflet center="melbourne" defaults="defaults" layers="layers">
+    <div id="flyover" class="flyover" style="position: absolute; z-index: 5000; top: 0; right: 0; height: 100%;">
+      <span id="flyover-toggle" style="cursor: pointer;" ng-click="toggleFlyover()">&lt;</span>
+      <div id="flyover-content"></div>
+    </div>
+  </leaflet>
 </div>
