@@ -95,38 +95,39 @@ var libs = {
     library : './lib/inalacourt.angular.directives.js',
     options : { expose : 'directives' }
   },
+
   services : {
-    library : './lib/inalacourt.angular.services.js',
+    library : './lib/inalacourt.nafc.services.js',
     options : { expose : 'services' }
   },
 
   application : {
-    library : './lib/inalacourt.angular.application.js',
+    library : './lib/inalacourt.nafc.application.js',
     options : { expose : 'application' }
   },
 
   incident : {
-    library : './lib/inalacourt.angular.incident.js',
+    library : './lib/inalacourt.nafc.incident.js',
     options : { expose : 'incident' }
   },
   broadcast : {
-    library : './lib/inalacourt.angular.broadcast.js',
+    library : './lib/inalacourt.nafc.broadcast.js',
     options : { expose : 'broadcast' }
   },
   overview : {
-    library : './lib/inalacourt.angular.overview.js',
+    library : './lib/inalacourt.nafc.overview.js',
     options : { expose : 'overview' }
   },
   tracking : {
-    library : './lib/inalacourt.angular.tracking.js',
+    library : './lib/inalacourt.nafc.tracking.js',
     options : { expose : 'tracking' }
   },
   terrain : {
-    library : './lib/inalacourt.angular.terrain.js',
+    library : './lib/inalacourt.nafc.terrain.js',
     options : { expose : 'terrain' }
   },
   victoria : {
-    library : './lib/inalacourt.angular.victoria.js',
+    library : './lib/inalacourt.nafc.victoria.js',
     options : { expose : 'victoria' }
   },
 
@@ -207,21 +208,15 @@ app.get ( "/nafc/victoria", function ( req, res ) {
   } );
 } );
 
-//app.get ( "/tracking", function ( req, res ) {
-//  var agent = req.headers['user-agent'];
-//  res.render ( 'tracking', {
-//    title : 'Tracking',
-//    agent : agent
-//  } );
-//} );
-
 /*
  Data Feeds
  */
 app.get ( "/incidents", function ( req, res ) {
   var agent = req.headers['user-agent'];
   res.set ( "Content-Type", "application/json" );
-  georss ( "http://www.rfs.nsw.gov.au/feeds/majorIncidents.xml" )
+  georss ( "http://www.rfs.nsw.gov.au/feeds/majorIncidents.xml", function ( err ) {
+    error ( "Incident Feed Error", util.inspect ( err ) );
+  } )
     .pipe ( geojson ( req.param ( 'type' ) || "georss" ) )
     .pipe ( oppressor ( req ) )
     .pipe ( res )
@@ -253,7 +248,7 @@ app.get ( "/details", function ( req, res ) {
 } );
 
 //emap_data( app );
-emap_tiles( app );
+emap_tiles ( app );
 
 app.get ( "/browserify.js", function ( req, res ) {
   res.set ( "Content-Type", "application/javascript" );
@@ -331,33 +326,33 @@ io.set ( 'log level', 1 );
 
 var sockets = io.of ( '/asset' );
 io.sockets.on ( 'connection', function ( socket ) {
-  debug( "Report from Database", "Blah" );
+  debug ( "Report from Database", "Blah" );
   database ( 'reports' ).latest ( function ( err, itm ) {
     socket.emit ( 'position', extracted ( itm ) );
   } );
 } );
 
 /*
-io.sockets.on('connection', function (socket) {
-  socket.emit('send:name', {
-    name: 'Bob'
-  });
-  setInterval(function () {
-    socket.emit('send:time', {
-      time: (new Date()).toString()
-    });
-  }, 1000);
-});
-*/
+ io.sockets.on('connection', function (socket) {
+ socket.emit('send:name', {
+ name: 'Bob'
+ });
+ setInterval(function () {
+ socket.emit('send:time', {
+ time: (new Date()).toString()
+ });
+ }, 1000);
+ });
+ */
 
 setInterval ( function () {
   var identity = {
     username : process.env.GATEWAY_USERNAME || "username",
     password : process.env.GATEWAY_PASSWORD || "password"
   };
-  debug( "Report", util.inspect( identity ) );
+  debug ( "Report", util.inspect ( identity ) );
   report ( identity, function ( err, item ) {
-    debug( "On...", util.inspect( item ) );
+    debug ( "On...", util.inspect ( item ) );
     if ( err ) {
       error ( "Report", err );
     }
@@ -371,8 +366,8 @@ setInterval ( function () {
 
 /*
  https://emap.dse.vic.gov.au/ArcGIS/rest/services/boundaries/MapServer/2/query?where=OBJECTID+%3E+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=pjson
-            https://emap.dse.vic.gov.au/arcgis/rest/services/incidents/MapServer/0/query?where=OBJECTID+%3E+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=pjson
-            https://emap.dse.vic.gov.au/arcgis/rest/services/todays_incidents/MapServer/0/query?where=OBJECTID+%3E+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=pjson
+ https://emap.dse.vic.gov.au/arcgis/rest/services/incidents/MapServer/0/query?where=OBJECTID+%3E+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=pjson
+ https://emap.dse.vic.gov.au/arcgis/rest/services/todays_incidents/MapServer/0/query?where=OBJECTID+%3E+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=pjson
  Regions -> https://emap.dse.vic.gov.au/ArcGIS/rest/services/boundaries/MapServer/2/query?returnGeometry=true&spatialRel=esriSpatialRelIntersects&where=1+%3d+1&outSR=4326&outFields=*&f=json&
  Burns   -> https://emap.dse.vic.gov.au/ArcGIS/rest/services/phoenix/MapServer/1/query?returnGeometry=true&spatialRel=esriSpatialRelIntersects&where=1+%3d+1&outSR=4326&outFields=*&f=json&
  */

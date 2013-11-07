@@ -1,39 +1,42 @@
 <style>
-  .information {
-    padding: 6px 8px;
-    font: 14px/16px Arial, Helvetica, sans-serif;
-    background: white;
-    background: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
+  .leaflet-container {
+    background: black;
   }
 
-  .info h4 {
-    margin: 0 0 5px;
-    color: #777;
+  .leaflet-tile-pane {
+    opacity: 0.65;
   }
 
-  .legend {
-    text-align: left;
-    line-height: 18px;
-    color: #555;
+  .flyover {
+    background: #DDD;
+    width: 10px;
+    padding: 0;
   }
 
-  .legend i {
-    width: 18px;
-    height: 18px;
-    float: left;
-    margin-right: 8px;
-    opacity: 0.7;
+  #container.flyover-open #flyover {
+    padding-left: 5px;
+    width: 200px;
   }
 
-  .label {
-    text-transform: capitalize;
+  .flyover #flyover-content {
+    width: 0;
+  }
+
+  #container.flyover-open #flyover-content {
+    width: 100%;
+  }
+
+  #container .leaflet-right {
+    margin-right: 10px;
+  }
+
+  #container.flyover-open .leaflet-right {
+    margin-right: 205px;
   }
 </style>
-<div ng-controller="Tracking">
-  <div id="flyover" class="flyover" style="position: absolute; z-index: 5000; top: 0; right: 0; height: 100%;">
-    <span id="flyover-toggle" style="cursor: pointer;" onclick="toggleFlyover();">&lt;</span>
+<div id="container" ng-controller="Tracking">
+  <div id="flyover" class="flyover" style="position: relative; z-index: 5000; top: 0; right: 0; height: 100%;">
+    <span id="flyover-toggle" style="cursor: pointer;" ng-click="toggleFlyover()">&lt;</span>
     <div id="flyover-content"></div>
   </div>
   <leaflet center="melbourne" defaults="defaults" layers="layers"></leaflet>
