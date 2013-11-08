@@ -24,12 +24,13 @@
     <link rel="stylesheet" href="/dist/leaflet/leaflet.fullscreen.css"/>
     <link rel="stylesheet" href="/dist/leaflet/leaflet.search.css"/>
 
-    <link rel="stylesheet" href="/style/inalacourt.information.css"/>
+    <link rel="stylesheet" href="/style/inalacourt.leaflet.information.css"/>
+    <link rel="stylesheet" href="/style/inalacourt.leaflet.notifications.css"/>
+    <link rel="stylesheet" href="/style/inalacourt.leaflet.navigation.css"/>
+
     <link rel="stylesheet" href="/style/inalacourt.incident.css"/>
-    <link rel="stylesheet" href="/style/inalacourt.notifications.css"/>
     <link rel="stylesheet" href="/style/inalacourt.markers.css"/>
     <link rel="stylesheet" href="/style/inalacourt.platform.css"/>
-    <link rel="stylesheet" href="/style/inalacourt.leaflet.navigation.css"/>
 
     <script src="/dist/components/jquery/jquery.js"></script>
     <script src="/dist/components/bootstrap/dist/js/bootstrap.js"></script>
@@ -45,18 +46,18 @@
       var io = require ( "socket.io" );
     </script>
 
-
     <script>
+      var u = require ( 'util' );
+      var t = require ( 'template' );
       var f = require ( "information" );
       var z = require ( "notifications" );
       var n = require ( "navigation" );
       var m = require ( "dynamarker" );
-      var t = require ( 'template' );
-      var u = require ( 'util' );
 
       var e = require ( "extensions" )( angular );
       var b = require ( "directives" )( angular );
       var d = require ( "services" )( angular );
+
       var i = require ( "overview" )( angular );
       var o = require ( "incident" )( angular );
       var r = require ( "terrain" )( angular );

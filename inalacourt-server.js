@@ -1,28 +1,27 @@
 #!/bin/env node
-
-var connect = require ( 'connect' )
-  , express = require ( 'express' )
-  , fs = require ( 'fs' )
-  , fsx = require ( 'fs-extra' )
-  , ejs = require ( 'ejs' )
-  , util = require ( 'util' )
-  , browser = require ( 'browserify' )
-  , path = require ( 'path' )
-  , oppressor = require ( 'oppressor' )
+var connect    = require ( 'connect' )
+  , express    = require ( 'express' )
+  , fs         = require ( 'fs' )
+  , fsx        = require ( 'fs-extra' )
+  , ejs        = require ( 'ejs' )
+  , util       = require ( 'util' )
+  , browser    = require ( 'browserify' )
+  , path       = require ( 'path' )
+  , oppressor  = require ( 'oppressor' )
   , underscore = require ( 'underscore' )
-  , http = require ( 'http' )
-  , colors = require ( 'colors' )
-  , brfs = require ( 'brfs' )
-  , through = require ( 'through' )
+  , http       = require ( 'http' )
+  , colors     = require ( 'colors' )
+  , brfs       = require ( 'brfs' )
+  , through    = require ( 'through' )
   , jsonstream = require ( 'JSONStream' )
-  , report = require ( './lib/inalacourt.tracplus.js' )
-  , geojson = require ( './lib/inalacourt.geojson.js' )
-  , database = require ( './lib/inalacourt.database.js' )
-  , emap = require ( './lib/inalacourt.emap.js' )
+  , report     = require ( './lib/inalacourt.tracplus.js' )
+  , geojson    = require ( './lib/inalacourt.geojson.js' )
+  , database   = require ( './lib/inalacourt.database.js' )
+  , emap       = require ( './lib/inalacourt.emap.js' )
   , emap_tiles = require ( './lib/inalacourt.emap.tiles.js' )
-  , georss = require ( './lib/inalacourt.georss.js' )
-  , esrijson = require ( './lib/inalacourt.esri2json.js' )
-  , nswData = require ( './data/nsw_data.json' );
+  , georss     = require ( './lib/inalacourt.georss.js' )
+  , esrijson   = require ( './lib/inalacourt.esri2json.js' )
+  , nswData    = require ( './data/nsw_data.json' );
 
 var app = express ();
 
@@ -71,20 +70,20 @@ var libs = {
     options : { expose : 'template' }
   },
   notifications : {
-    library : './lib/inalacourt.notifications.js',
+    library : './lib/inalacourt.leaflet.notifications.js',
     options : { expose : 'notifications' }
   },
   navigation : {
     library : './lib/inalacourt.leaflet.navigation.js',
     options : { expose : 'navigation' }
   },
-  dynamarker : {
-    library : './lib/inalacourt.dynamarker.js',
-    options : { expose : 'dynamarker' }
-  },
   information : {
-    library : './lib/inalacourt.information.js',
+    library : './lib/inalacourt.leaflet.information.js',
     options : { expose : 'information' }
+  },
+  dynamarker : {
+    library : './lib/inalacourt.leaflet.dynamarker.js',
+    options : { expose : 'dynamarker' }
   },
 
   extensions : {
@@ -231,7 +230,6 @@ app.get ( "/regions", function ( req, res ) {
   handler
     .pipe ( oppressor ( req ) )
     .pipe ( res )
-  //var file = path.join ( "data", req.param ( 'file' ).toString () + ".json" );
   var file = path.join ( "data", "regions.json" );
   handler.write ( esrijson ( fsx.readJsonFileSync ( file ) ) );
   handler.end ();
