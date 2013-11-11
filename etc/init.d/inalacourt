@@ -1,0 +1,58 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:		    inalacourt
+# Required-Start:
+# Required-Stop:
+# Default-Start:	2 3 4 5
+# Default-Stop:
+# Short-Description:	Run nafc tracking application
+### END INIT INFO
+
+# Source function library.
+. /lib/lsb/init-functions
+
+APP=__application__
+DIR=__directory__
+USR=__username__
+PWD=__password__
+
+start() {
+   su - root -c "cd $DIR && GATEWAY_USERNAME=$USR GATEWAY_PASSWORD=$PWD PORT=80 NODE_ENV=production forever start $APP
+   RETVAL=$?
+}
+
+restart() {
+	su - root -c "cd $DIR && forever restart $APP"
+	RETVAL=$?
+}
+
+stop() {
+   su - root -c "cd $DIR && forever stop $APP"
+   RETVAL=$?
+}
+
+status() {
+   su - root -c "cd $DIR && forever list"
+   RETVAL=$?
+}
+
+case "$1" in
+   start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+   status)
+        status
+        ;;
+   restart)
+   	    restart
+        ;;
+	*)
+       echo "Usage:  {start|stop|status|restart}"
+       exit 1
+        ;;
+esac
+exit $RETVAL
