@@ -5,7 +5,10 @@
   "main": "inalacourt-server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "nodemon -w . -w views inalacourt-server.js"
+    "debug": "nodemon -w . -w views inalacourt-server.js",
+    "bower" : "bower install",
+    "start": "forever start -o ./out.log -e ./err.log inalacourt-server.js ",
+    "stop": "forever stop inalacourt-server.js"
   },
   "author": "johnstewartlayton@gmail.com",
   "license": "",

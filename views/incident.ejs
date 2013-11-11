@@ -1,3 +1,122 @@
+<style type="text/css">
+  #map {
+    background: #fff url("../img/checkerboard.png") repeat;
+    height: 450px;
+    width: 100%;
+  }
+
+  #map-toolbar {
+    box-shadow: 0 0 5px -1px rgba(0, 0, 0, 1);
+    color: #333333;
+    box-sizing: border-box;
+    background: #ddd;
+    outline: 0;
+    padding: 5px 5px 5px 5px;
+  }
+
+  .toolbar {
+    background: #8c94a3;
+    padding: 20px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    list-style: none;
+    /*padding: 10px;*/
+    /*margin-top: 0px;*/
+  }
+
+  .toolbar li {
+    display: inline-block;
+    text-align: center;
+    padding-top: 45px;
+    position: relative;
+    font-size: 12px;
+    line-height: 125%;
+    vertical-align: top;
+    width: 120px;
+  }
+
+  .toolbar li span {
+    display: block;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    top: 0px;
+    left: 50%;
+    margin-left: -20px;
+    background-color: #fff;
+    border-radius: 4px;
+    -moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, .1);
+    -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, .1);
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, .1);
+  }
+
+  .toolbar a:link,
+  .toolbar a:visited,
+  .toolbar a:active {
+    color: #fff;
+  }
+
+  .toolbar li.active span {
+    background-color: #FF9900;
+  }
+
+  .toolbar .tb-incidents {
+    background: #fff url("../img/map-icon-incidents.png") no-repeat center center;
+  }
+
+  .toolbar .tb-boundaries {
+    background: #fff url("../img/map-icon-boundaries.png") no-repeat center center;
+  }
+
+  .toolbar .tb-aircraft {
+    background: #fff url("../img/map-icon-aircraft.png") no-repeat center center;
+  }
+
+  .toolbar .tb-resources {
+    background: #fff url("../img/map-icon-resources.png") no-repeat center center;
+  }
+
+  .toolbar .tb-weather {
+    background: #fff url("../img/map-icon-weather.png") no-repeat center center;
+  }
+
+  .toolbar .tb-bom {
+    background: #fff url("../img/map-icon-bom.png") no-repeat center center;
+  }
+</style>
+
+<script type="text/ng-template" id="incident_button.html">
+  <li ng-class="{active:layers.overlays['incident'].visible}">
+    <a href="#"
+       ng-click="toggleOverlayLayer('incident')"
+       title="Toggle the display of incidents on the map">
+      <span class="tb-incidents toolbar-btn"></span>
+      {{ incident.name }}
+    </a>
+  </li>
+</script>
+
 <div ng-controller="Incident">
-  <leaflet center="melbourne" defaults="defaults" geojson="geojson"></leaflet>
+
+  <leaflet center="canberra" defaults="defaults"></leaflet>
+
+  <div> {{ time | date:'medium' }}</div>
+
+  <div id="map-toolbar">
+    <ul class="toolbar">
+      <!--<li sticky-note ng-repeat="note in notes" note="note" class="alert alert-block sticky-note"-->
+      <li incident_button ng-repeat="incident in other.incidents" incident="incident" />
+        <!--
+        <a href="#"
+           ng-click="toggleOverlayLayer('incident')"
+           title="Toggle the display of incidents on the map">
+          <span class="tb-incidents toolbar-btn"></span>
+          {{ incident.name }}
+        </a>
+        -->
+      </li>
+    </ul>
+  </div>
+
 </div>
