@@ -262,7 +262,7 @@ app.get ( "/browserify.js", function ( req, res ) {
       error ( "Browserify Bundle", err )
     }
   } )
-    .pipe ( oppressor ( req ) )
+    //.pipe ( oppressor ( req ) )
     .pipe ( res )
 } );
 
