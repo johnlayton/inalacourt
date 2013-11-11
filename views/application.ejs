@@ -5,12 +5,20 @@
     <link rel="stylesheet" href="/dist/components/bootstrap/dist/css/bootstrap.css"/>
     <link rel="stylesheet" href="/dist/components/bootstrap/dist/css/bootstrap-theme.css"/>
 
+    <!--
     <link rel="stylesheet" href="/dist/leaflet/leaflet.css"/>
-    <!--[if lte IE 8]>
+    &lt;!&ndash;[if lte IE 8]>
     <link rel="stylesheet" href="/dist/leaflet/leaflet.ie.css"/>
+    <![endif]&ndash;&gt;
+    -->
+
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
     <![endif]-->
 
-    <script src="/dist/leaflet/leaflet-src.js"></script>
+    <!--<script src="/dist/leaflet/leaflet-src.js"></script>-->
+    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
     <script src="/dist/leaflet/leaflet.fullscreen.js"></script>
     <script src="/dist/leaflet/leaflet.hash.js"></script>
     <script src="/dist/leaflet/leaflet.search.js"></script>
@@ -37,7 +45,7 @@
 
     <script src="/dist/components/angular/angular.js"></script>
     <script src="/dist/components/angular-route/angular-route.js"></script>
-    <script src="/dist/components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
+    <script src="/dist/components/angular-leaflet-directive-src/dist/angular-leaflet-directive.min.js"></script>
     <script src="/dist/components/angular-socket-io/socket.js"></script>
 
     <script src="/browserify.js?libs=util,io,template,information,notifications,navigation,dynamarker,extensions,directives,services,application,incident,overview,tracking,terrain,victoria,broadcast"></script>
