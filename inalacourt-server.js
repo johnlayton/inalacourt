@@ -360,7 +360,7 @@ setInterval ( function () {
       } );
     }
   } );
-}, 10000 );
+}, 60000 );
 
 /*
  https://emap.dse.vic.gov.au/ArcGIS/rest/services/boundaries/MapServer/2/query?where=OBJECTID+%3E+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=pjson
