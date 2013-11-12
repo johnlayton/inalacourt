@@ -2,6 +2,7 @@ dist/components/*
 dist/angular/*
 node_modules/*
 data/reports/*
+data/test_*/*
 
 data/burns.json
 data/nsw-incidents.json
