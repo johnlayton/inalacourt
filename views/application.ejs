@@ -43,7 +43,8 @@
 
     <script src="/dist/components/angular/angular.js"></script>
     <script src="/dist/components/angular-route/angular-route.js"></script>
-    <script src="/dist/components/angular-leaflet-directive/dist/angular-leaflet-directive.min.js"></script>
+    <script src="/dist/leaflet/leaflet.angular.directive.js"></script>
+    <!--<script src="/dist/components/angular-leaflet-directive-src/dist/angular-leaflet-directive.js"></script>-->
     <script src="/dist/components/angular-socket-io/socket.js"></script>
 
     <script src="/browserify.js?libs=util,io,template,information,notifications,navigation,dynamarker,extensions,directives,services,application,incident,overview,tracking,terrain,victoria,broadcast"></script>
@@ -60,7 +61,7 @@
       var n = require ( "navigation" );
       var m = require ( "dynamarker" );
 
-      var e = require ( "extensions" )( angular );
+      //var e = require ( "extensions" )( angular );
       var b = require ( "directives" )( angular );
       var d = require ( "services" )( angular );
 
@@ -75,7 +76,7 @@
 
     <style>
       .angular-leaflet-map {
-        height: 400px;
+        height: 600px;
         border: 4px #fff solid;
         border: 4px #fff solid;
         margin-bottom: 20px;
@@ -92,11 +93,11 @@
         </div>
         <ul class="nav navbar-nav navbar-right">
           <li ng-class="{ active: activeTab == 'tracking' }"><a ng-href="#!/tracking">Tracking</a></li>
-          <li ng-class="{ active: activeTab == 'overview' }"><a ng-href="#!/overview">Overview</a></li>
-          <li ng-class="{ active: activeTab == 'incident' }"><a ng-href="#!/incident">Incidents</a></li>
-          <li ng-class="{ active: activeTab == 'victoria' }"><a ng-href="#!/victoria">Victoria</a></li>
-          <li ng-class="{ active: activeTab == 'broadcast' }"><a ng-href="#!/broadcast">Broadcast</a></li>
-          <li ng-class="{ active: activeTab == 'terrain'  }"><a ng-href="#!/terrain">Terrain</a></li>
+          <!--<li ng-class="{ active: activeTab == 'overview' }"><a ng-href="#!/overview">Overview</a></li>-->
+          <!--<li ng-class="{ active: activeTab == 'incident' }"><a ng-href="#!/incident">Incidents</a></li>-->
+          <!--<li ng-class="{ active: activeTab == 'victoria' }"><a ng-href="#!/victoria">Victoria</a></li>-->
+          <!--<li ng-class="{ active: activeTab == 'broadcast' }"><a ng-href="#!/broadcast">Broadcast</a></li>-->
+          <!--<li ng-class="{ active: activeTab == 'terrain'  }"><a ng-href="#!/terrain">Terrain</a></li>-->
         </ul>
       </header>
     </div>
