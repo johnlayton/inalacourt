@@ -39,8 +39,8 @@ var cross = function ( req, res, next ) {
 
 app.configure ( function () {
   app.set ( 'port', process.env.PORT || 8080 );
-  app.set ( 'username', process.env.USERNAME || "username" );
-  app.set ( 'password', process.env.PASSWORD || "password" );
+  app.set ( 'username', process.env.GATEWAY_USERNAME || "username" );
+  app.set ( 'password', process.env.GATEWAY_PASSWORD || "password" );
   app.set ( 'views', __dirname + '/views' );
   app.set ( 'view engine', 'ejs' );
   app.use ( cross );
