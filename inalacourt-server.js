@@ -332,23 +332,8 @@ io.sockets.on ( 'connection', function ( socket ) {
   } );
 } );
 
-/*
- io.sockets.on('connection', function (socket) {
- socket.emit('send:name', {
- name: 'Bob'
- });
- setInterval(function () {
- socket.emit('send:time', {
- time: (new Date()).toString()
- });
- }, 1000);
- });
- */
-
 setInterval ( function () {
   var identity = {
-    //username : process.env.GATEWAY_USERNAME || "username",
-    //password : process.env.GATEWAY_PASSWORD || "password"
     username : app.get( "username" ),
     password : app.get( "password" )
   };
@@ -364,7 +349,7 @@ setInterval ( function () {
       } );
     }
   } );
-}, 60000 );
+}, 10000 );
 
 /*
  https://emap.dse.vic.gov.au/ArcGIS/rest/services/boundaries/MapServer/2/query?where=OBJECTID+%3E+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=pjson

@@ -15,6 +15,7 @@
   "author": "johnstewartlayton@gmail.com",
   "license": "",
   "dependencies": {
+    "uuid"                 : "*",
     "wordwrap"             : "*",
     "optimist"             : "*",
     "npm"                  : "*",
