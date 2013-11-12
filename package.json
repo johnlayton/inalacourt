@@ -8,9 +8,16 @@
     "start"   : "forever start -o ./out.log -e ./err.log inalacourt-server.js",
     "stop"    : "forever stop inalacourt-server.js"
   },
+  "repository" : {
+    "type" : "git",
+    "url"  : "https://github.com/johnlayton/inalacourt.git"
+  },
   "author": "johnstewartlayton@gmail.com",
   "license": "",
   "dependencies": {
+    "wordwrap"             : "*",
+    "optimist"             : "*",
+    "npm"                  : "*",
     "connect"              : "*",
     "domready"             : "*",
     "browserify"           : "*",

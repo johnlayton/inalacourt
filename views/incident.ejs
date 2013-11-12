@@ -86,7 +86,7 @@
   }
 </style>
 
-<script type="text/ng-template" id="incident_button.html">
+<script type="text/ng-template" id="nafc_incident_button.html">
   <li ng-class="{active:layers.overlays['incident'].visible}">
     <a href="#"
        ng-click="toggleOverlayLayer('incident')"
@@ -97,26 +97,35 @@
   </li>
 </script>
 
+<script type="text/ng-template" id="nafc_incident_toolbar.html">
+  <div id="map-toolbar">
+    <ul class="toolbar">
+      <nafc-incident-button ng-repeat="incident in incidents" incident="incident"/>
+                    <!--
+                    &lt;!&ndash;<li sticky-note ng-repeat="note in notes" note="note" class="alert alert-block sticky-note"&ndash;&gt;
+                    <li incident_button ng-repeat="incident in other.incidents" incident="incident"/>
+                    &lt;!&ndash;
+                    <a href="#"
+                       ng-click="toggleOverlayLayer('incident')"
+                       title="Toggle the display of incidents on the map">
+                      <span class="tb-incidents toolbar-btn"></span>
+                      {{ incident.name }}
+                    </a>
+                    &ndash;&gt;
+                    </li>
+                    -->
+    </ul>
+  </div>
+</script>
+
 <div ng-controller="Incident">
 
   <leaflet center="canberra" defaults="defaults"></leaflet>
 
-  <div> {{ time | date:'medium' }}</div>
+  <!--<div> {{ time | date:'medium' }}</div>-->
 
-  <div id="map-toolbar">
-    <ul class="toolbar">
-      <!--<li sticky-note ng-repeat="note in notes" note="note" class="alert alert-block sticky-note"-->
-      <li incident_button ng-repeat="incident in other.incidents" incident="incident" />
-        <!--
-        <a href="#"
-           ng-click="toggleOverlayLayer('incident')"
-           title="Toggle the display of incidents on the map">
-          <span class="tb-incidents toolbar-btn"></span>
-          {{ incident.name }}
-        </a>
-        -->
-      </li>
-    </ul>
-  </div>
+  <nafc-incident-toolbar incidents="other.incidents">
+    <!--<nafc-incident-button ng-repeat="incident in other.incidents" incident="incident"/>-->
+  </nafc-incident-toolbar>
 
 </div>

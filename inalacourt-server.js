@@ -39,6 +39,8 @@ var cross = function ( req, res, next ) {
 
 app.configure ( function () {
   app.set ( 'port', process.env.PORT || 8080 );
+  app.set ( 'username', process.env.USERNAME || "username" );
+  app.set ( 'password', process.env.PASSWORD || "password" );
   app.set ( 'views', __dirname + '/views' );
   app.set ( 'view engine', 'ejs' );
   app.use ( cross );
@@ -345,8 +347,10 @@ io.sockets.on ( 'connection', function ( socket ) {
 /*
 setInterval ( function () {
   var identity = {
-    username : process.env.GATEWAY_USERNAME || "username",
-    password : process.env.GATEWAY_PASSWORD || "password"
+    //username : process.env.GATEWAY_USERNAME || "username",
+    //password : process.env.GATEWAY_PASSWORD || "password"
+    username : app.get( "username" ),
+    password : app.get( "password" )
   };
   debug ( "Report", util.inspect ( identity ) );
   report ( identity, function ( err, item ) {
