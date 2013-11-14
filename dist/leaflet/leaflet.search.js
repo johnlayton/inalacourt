@@ -32,6 +32,7 @@ L.Control.Search = L.Control.extend({
 		layer: null,				//layer where search markers(is a L.LayerGroup)		
 		callData: null,				//function that fill _recordsCache, passed searching text by first param and callback in second
 		//TODO important! implements uniq option 'sourceData' that recognizes source type: url,array,callback or layer		
+		//TODO implement can do research on multiple sources
 		propertyName: 'title',		//property in marker.options(or feature.properties for vector layer) trough filter elements in layer
 		propertyLoc: 'loc',			//field name for remapping location, using array: ['latname','lonname'] for select double fields(ex. ['lat','lon'] )
 		//TODO implement sub property filter for propertyName,propertyLoc like this:  "prop.subprop.title"
@@ -54,14 +55,14 @@ L.Control.Search = L.Control.extend({
 		text: 'Search...',			//placeholder value	
 		textCancel: 'Cancel',		//title in cancel button
 		textErr: 'Location not found',	//error message
-		position: 'topleft',
+		position: 'topleft'
 		//TODO add option collapsed, like control.layers
 	},
 //FIXME option condition problem {autoCollapse: true, markerLocation: true} not show location
-//FIXME option condition problem {autoCollapse:false }
+//FIXME option condition problem {autoCollapse: false }
 
 	initialize: function(options) {
-		L.Util.setOptions(this, options);
+		L.Util.setOptions(this, options || {});
 		this._inputMinSize = this.options.text ? this.options.text.length : 10;
 		this._layer = this.options.layer || new L.LayerGroup();
 		this._filterJSON = this.options.filterJSON || this._defaultFilterJSON;
@@ -83,12 +84,11 @@ L.Control.Search = L.Control.extend({
 			this._markerLoc = new SearchMarker([0,0], {marker: this.options.markerLocation});//see below
 		
 		this.setLayer( this._layer );
-		this._input.style.maxWidth = L.DomUtil.getStyle(this._map._container,'width');
-		//TODO resize _input on map resize
-		// map.on({
+		 map.on({
 		// 		'layeradd': this._onLayerAddRemove,
 		// 		'layerremove': this._onLayerAddRemove
-		// 	}, this);		
+		     'resize':this._handleAutoresize()
+		 	}, this);
 		return this._container;
 	},
 
@@ -361,14 +361,6 @@ L.Control.Search = L.Control.extend({
 			propName = this.options.propertyName,
 			propLoc = this.options.propertyLoc;
 
-		//TODO patch! remove on Leaflet stable update include isArray() method
-		if(!L.Util.isArray)
-		{
-			L.Util.isArray = function (obj) {
-				return (Object.prototype.toString.call(obj) === '[object Array]');
-			};
-		}
-		
 		if( L.Util.isArray(propLoc) )
 			for(var i in json)
 				jsonret[ json[i][propName] ]= L.latLng( json[i][ propLoc[0] ], json[i][ propLoc[1] ] );
@@ -446,7 +438,7 @@ L.Control.Search = L.Control.extend({
 				else
 					console.log("propertyName '"+propName+"' not found in marker", layer);	
 			}
-			else if(layer instanceof L.Path)
+			else if(layer.hasOwnProperty('feature'))//GeoJSON layer
 			{
 				if(layer.feature.properties.hasOwnProperty(propName))
 				{
@@ -497,6 +489,14 @@ L.Control.Search = L.Control.extend({
 		var sel;
 		if ((sel = this._input.selection) && sel.empty) {
 			sel.empty();
+		}
+		else if (this._input.createTextRange) {
+			sel = this._input.createTextRange();
+			sel.collapse(true);
+			var end = this._input.value.length;
+			sel.moveStart('character', end);
+			sel.moveEnd('character', end);
+			sel.select();
 		}
 		else {
 			if (this._input.getSelection) {
@@ -612,9 +612,11 @@ L.Control.Search = L.Control.extend({
 		}
 	},
 	
-	//FIXME _handleAutoresize Should resize max search box size when map is resized.
 	_handleAutoresize: function() {	//autoresize this._input
-	//TODO refact _handleAutoresize now is not accurate
+	    //TODO refact _handleAutoresize now is not accurate
+	    if (this._input.style.maxWidth != this._map._container.offsetWidth) //If maxWidth isn't the same as when first set, reset to current Map width
+	        this._input.style.maxWidth = L.DomUtil.getStyle(this._map._container, 'width');
+
 		if(this.options.autoResize && (this._container.offsetWidth + 45 < this._map._container.offsetWidth))
 			this._input.size = this._input.value.length<this._inputMinSize ? this._inputMinSize : this._input.value.length;
 	},
@@ -824,7 +826,7 @@ var SearchMarker = L.Marker.extend({
 
 L.Map.addInitHook(function () {
     if (this.options.searchControl) {
-        this.searchControl = L.control.search();
+        this.searchControl = L.control.search(this.options.searchControl);
         this.addControl(this.searchControl);
     }
 });

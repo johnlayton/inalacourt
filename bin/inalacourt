@@ -4,6 +4,8 @@ var util     = require( 'util' );
 var fs       = require( 'fs' );
 var fsx      = require( 'fs-extra' );
 var npm      = require( 'npm' );
+var child    = require( 'child_process' );
+//var nodemon  = require( 'nodemon' );
 
 //util.debug( util.inspect( optimist ) );
 
@@ -13,8 +15,16 @@ var actions = {
   "help": function() {
     return fs.createReadStream(__dirname + '/usage.txt').pipe(process.stdout);
   },
-  "run" : function() {
-    require('./../inalacourt-server.js');
+  "run" : function( argv ) {
+    process.env.GATEWAY_USERNAME = argv._[1]
+    process.env.GATEWAY_PASSWORD = argv._[2]
+    //require('./../inalacourt-server.js');
+    //child.exec( "nodemon inalacourt-server.js" );
+
+    //console.log( util.inspect( nodemon ) );
+
+    require( 'nodemon' )
+    //startNode();
   }
 }
 
@@ -23,7 +33,10 @@ if (argv.h || argv.help || argv._[0] === 'help') {
 }
 
 if (argv._[0] === 'run') {
-  actions["run"]();
+
+  console.log( "HERE..." );
+
+  actions["run"]( argv );
 }
 
 if (argv._[0] === 'install') {

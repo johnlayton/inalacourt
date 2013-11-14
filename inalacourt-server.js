@@ -1,27 +1,27 @@
 #!/bin/env node
-var connect    = require ( 'connect' )
-  , express    = require ( 'express' )
-  , fs         = require ( 'fs' )
-  , fsx        = require ( 'fs-extra' )
-  , ejs        = require ( 'ejs' )
-  , util       = require ( 'util' )
-  , browser    = require ( 'browserify' )
-  , path       = require ( 'path' )
-  , oppressor  = require ( 'oppressor' )
+var connect = require ( 'connect' )
+  , express = require ( 'express' )
+  , fs = require ( 'fs' )
+  , fsx = require ( 'fs-extra' )
+  , ejs = require ( 'ejs' )
+  , util = require ( 'util' )
+  , browser = require ( 'browserify' )
+  , path = require ( 'path' )
+  , oppressor = require ( 'oppressor' )
   , underscore = require ( 'underscore' )
-  , http       = require ( 'http' )
-  , colors     = require ( 'colors' )
-  , brfs       = require ( 'brfs' )
-  , through    = require ( 'through' )
+  , http = require ( 'http' )
+  , colors = require ( 'colors' )
+  , brfs = require ( 'brfs' )
+  , through = require ( 'through' )
   , jsonstream = require ( 'JSONStream' )
-  , report     = require ( './lib/inalacourt.tracplus.js' )
-  , geojson    = require ( './lib/inalacourt.geojson.js' )
-  , database   = require ( './lib/inalacourt.database.js' )
-  , emap       = require ( './lib/inalacourt.emap.js' )
+  , report = require ( './lib/inalacourt.tracplus.js' )
+  , geojson = require ( './lib/inalacourt.geojson.js' )
+  , database = require ( './lib/inalacourt.database.js' )
+  , emap = require ( './lib/inalacourt.emap.js' )
   , emap_tiles = require ( './lib/inalacourt.emap.tiles.js' )
-  , georss     = require ( './lib/inalacourt.georss.js' )
-  , esrijson   = require ( './lib/inalacourt.esri2json.js' )
-  , nswData    = require ( './data/nsw_data.json' );
+  , georss = require ( './lib/inalacourt.georss.js' )
+  , esrijson = require ( './lib/inalacourt.esri2json.js' )
+  , nswData = require ( './data/nsw_data.json' );
 
 var app = express ();
 
@@ -38,7 +38,7 @@ var cross = function ( req, res, next ) {
 };
 
 app.configure ( function () {
-  app.set ( 'port', process.env.PORT || 8080 );
+  app.set ( 'port', process.env.PORT || 3000 );
   app.set ( 'username', process.env.GATEWAY_USERNAME || "username" );
   app.set ( 'password', process.env.GATEWAY_PASSWORD || "password" );
   app.set ( 'views', __dirname + '/views' );
@@ -63,10 +63,15 @@ app.configure ( 'development', function () {
  Browserify libs exposed
  */
 var libs = {
+  util : {
+    library : 'util',
+    options : { expose : 'util' }
+  },
   io : {
     library : 'socket.io-browserify',
     options : { expose : 'socket.io' }
   },
+
   template : {
     library : './lib/inalacourt.template.js',
     options : { expose : 'template' }
@@ -82,6 +87,10 @@ var libs = {
   information : {
     library : './lib/inalacourt.leaflet.information.js',
     options : { expose : 'information' }
+  },
+  iplayback : {
+    library : './lib/inalacourt.leaflet.playback.js',
+    options : { expose : 'iplayback' }
   },
   dynamarker : {
     library : './lib/inalacourt.leaflet.dynamarker.js',
@@ -123,18 +132,13 @@ var libs = {
     library : './lib/inalacourt.nafc.tracking.js',
     options : { expose : 'tracking' }
   },
-  terrain : {
-    library : './lib/inalacourt.nafc.terrain.js',
-    options : { expose : 'terrain' }
+  playback : {
+    library : './lib/inalacourt.nafc.playback.js',
+    options : { expose : 'playback' }
   },
   victoria : {
     library : './lib/inalacourt.nafc.victoria.js',
     options : { expose : 'victoria' }
-  },
-
-  util : {
-    library : 'util',
-    options : { expose : 'util' }
   }
 };
 
@@ -185,10 +189,10 @@ app.get ( "/nafc/broadcast", function ( req, res ) {
   } );
 } );
 
-app.get ( "/nafc/terrain", function ( req, res ) {
+app.get ( "/nafc/playback", function ( req, res ) {
   var agent = req.headers['user-agent'];
-  res.render ( 'terrain', {
-    title : 'NAFC Terrain',
+  res.render ( 'playback', {
+    title : 'NAFC Playback',
     agent : agent
   } );
 } );
@@ -247,6 +251,29 @@ app.get ( "/details", function ( req, res ) {
     .pipe ( res )
 } );
 
+app.get ( "/tracks", function ( req, res ) {
+  var agent = req.headers['user-agent'];
+  res.set ( "Content-Type", "application/json" );
+
+  console.log( req.param( 'id' ) );
+
+  database ( "reports" )
+    .list ( ( req.param ( 'id' ) || 1 ), ( req.param ( 'hours' ) || 24 ) )
+    .pipe ( geojson ( req.param ( 'type' ) || "multipoint" ) )
+    .pipe ( oppressor ( req ) )
+    .pipe ( res )
+} );
+
+app.get ( "/devices", function ( req, res ) {
+  var agent = req.headers['user-agent'];
+  res.set ( "Content-Type", "application/json" );
+  database ( 'reports' )
+    .latest ()
+    .pipe ( req.param ( 'id' ) ? geojson ( "passthrough" ) : geojson ( "identity" ) )
+    .pipe ( oppressor ( req ) )
+    .pipe ( res )
+} );
+
 //emap_data( app );
 emap_tiles ( app );
 
@@ -264,7 +291,7 @@ app.get ( "/browserify.js", function ( req, res ) {
       error ( "Browserify Bundle", err )
     }
   } )
-    //.pipe ( oppressor ( req ) )
+    .pipe ( oppressor ( req ) )
     .pipe ( res )
 } );
 
@@ -331,11 +358,11 @@ io.sockets.on ( 'connection', function ( socket ) {
     socket.emit ( 'position', extracted ( itm ) );
   } );
 } );
-
+/*
 setInterval ( function () {
   var identity = {
-    username : app.get( "username" ),
-    password : app.get( "password" )
+    username : app.get ( "username" ),
+    password : app.get ( "password" )
   };
   debug ( "Report", util.inspect ( identity ) );
   report ( identity, function ( err, item ) {
@@ -350,7 +377,7 @@ setInterval ( function () {
     }
   } );
 }, 10000 );
-
+*/
 /*
  https://emap.dse.vic.gov.au/ArcGIS/rest/services/boundaries/MapServer/2/query?where=OBJECTID+%3E+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=pjson
  https://emap.dse.vic.gov.au/arcgis/rest/services/incidents/MapServer/0/query?where=OBJECTID+%3E+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=pjson

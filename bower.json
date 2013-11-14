@@ -2,16 +2,18 @@
   "name": "inalacourt",
   "version": "0.0.0",
   "dependencies": {
-    "angular": "~1.2.0-rc.3",
-    "angular-route": "~1.2.0-rc.3",
-    "angular-resource": "~1.2.0-rc.3",
-    "angular-socket-io": "~0.2.0",
-    "angular-leaflet-directive": "~0.6.1",
-    "leaflet": "~0.6.4",
-    "json3": "~3.2.4",
-    "jquery": "~1.9.1",
-    "bootstrap": "~3.0.0",
-    "es5-shim": "~2.0.8"
+    "angular"                   : "~1.2.0-rc.3",
+    "angular-route"             : "~1.2.0-rc.3",
+    "angular-resource"          : "~1.2.0-rc.3",
+    "angular-socket-io"         : "~0.2.0",
+    "angular-leaflet-directive" : "~0.6.1",
+    "leaflet"                   : "~0.6.4",
+    "json3"                     : "~3.2.4",
+    "jquery"                    : "~1.9.1",
+    "jquery-ui"                 : "*",
+    "bootstrap"                 : "~3.0.0",
+    "es5-shim"                  : "~2.0.8",
+    "bootstrap-timepicker"      : "*"
   },
   "devDependencies": {
     "angular-mocks": "~1.0.7",

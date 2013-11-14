@@ -140,8 +140,12 @@ L.Draw.Feature = L.Handler.extend({
 	},
 
 	addHooks: function () {
-		if (this._map) {
+		var map = this._map;
+
+		if (map) {
 			L.DomUtil.disableTextSelection();
+
+			map.getContainer().focus();
 
 			this._tooltip = new L.Tooltip(this._map);
 
@@ -1192,10 +1196,10 @@ L.Edit.Poly = L.Handler.extend({
 
 	_getMiddleLatLng: function (marker1, marker2) {
 		var map = this._poly._map,
-		    p1 = map.latLngToLayerPoint(marker1.getLatLng()),
-		    p2 = map.latLngToLayerPoint(marker2.getLatLng());
+		    p1 = map.project(marker1.getLatLng()),
+		    p2 = map.project(marker2.getLatLng());
 
-		return map.layerPointToLatLng(p1._add(p2)._divideBy(2));
+		return map.unproject(p1._add(p2)._divideBy(2));
 	}
 });
 
@@ -2094,10 +2098,12 @@ L.Tooltip = L.Class.extend({
 	},
 
 	updatePosition: function (latlng) {
-		var pos = this._map.latLngToLayerPoint(latlng);
+		var pos = this._map.latLngToLayerPoint(latlng),
+			tooltipContainer = this._container;
 
 		if (this._container) {
-			L.DomUtil.setPosition(this._container, pos);
+			tooltipContainer.style.visibility = 'inherit';
+			L.DomUtil.setPosition(tooltipContainer, pos);
 		}
 
 		return this;
@@ -2355,13 +2361,17 @@ L.EditToolbar = L.Toolbar.extend({
 
 	_checkDisabled: function () {
 		var featureGroup = this.options.featureGroup,
-			hasLayers = featureGroup.getLayers().length === 0,
+			hasLayers = featureGroup.getLayers().length !== 0,
 			button;
 
 		if (this.options.edit) {
 			button = this._modes[L.EditToolbar.Edit.TYPE].button;
 
-			L.DomUtil.toggleClass(button, 'leaflet-disabled');
+			if (hasLayers) {
+				L.DomUtil.removeClass(button, 'leaflet-disabled');
+			} else {
+				L.DomUtil.addClass(button, 'leaflet-disabled');
+			}
 
 			button.setAttribute(
 				'title',
@@ -2374,7 +2384,11 @@ L.EditToolbar = L.Toolbar.extend({
 		if (this.options.remove) {
 			button = this._modes[L.EditToolbar.Delete.TYPE].button;
 
-			L.DomUtil.toggleClass(button, 'leaflet-disabled');
+			if (hasLayers) {
+				L.DomUtil.removeClass(button, 'leaflet-disabled');
+			} else {
+				L.DomUtil.addClass(button, 'leaflet-disabled');
+			}
 
 			button.setAttribute(
 				'title',
@@ -2386,17 +2400,6 @@ L.EditToolbar = L.Toolbar.extend({
 	}
 });
 
-if (!L.DomUtil.toggleClass) {
-	L.Util.extend(L.DomUtil, {
-		toggleClass: function (el, name) {
-			if (this.hasClass(el, name)) {
-				this.removeClass(el, name);
-			} else {
-				this.addClass(el, name);
-			}
-		}
-	});
-}
 
 L.EditToolbar.Edit = L.Handler.extend({
 	statics: {
@@ -2453,7 +2456,11 @@ L.EditToolbar.Edit = L.Handler.extend({
 	},
 
 	addHooks: function () {
-		if (this._map) {
+		var map = this._map;
+
+		if (map) {
+			map.getContainer().focus();
+
 			this._featureGroup.eachLayer(this._enableLayerEdit, this);
 
 			this._tooltip = new L.Tooltip(this._map);
@@ -2699,7 +2706,11 @@ L.EditToolbar.Delete = L.Handler.extend({
 	},
 
 	addHooks: function () {
-		if (this._map) {
+		var map = this._map;
+
+		if (map) {
+			map.getContainer().focus();
+
 			this._deletableLayers.eachLayer(this._enableLayerDelete, this);
 			this._deletedLayers = new L.layerGroup();
 
