@@ -72,13 +72,13 @@ var libs = {
     options : { expose : 'socket.io' }
   },
 
-  template : {
-    library : './lib/inalacourt.template.js',
-    options : { expose : 'template' }
-  },
   notifications : {
     library : './lib/inalacourt.leaflet.notifications.js',
     options : { expose : 'notifications' }
+  },
+  template : {
+    library : './lib/inalacourt.template.js',
+    options : { expose : 'template' }
   },
   navigation : {
     library : './lib/inalacourt.leaflet.navigation.js',
