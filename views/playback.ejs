@@ -149,9 +149,13 @@
     <!--border-bottom: 0;-->
   <!--}-->
 <!--</style>-->
-
+<style>
+  #map {
+    display: none;
+  }
+</style>
 <script type="text/ng-template" id="nafc_playback_control.html">
-  <div id="map-toolbar">
+  <!--<div id="map-toolbar">-->
     <!--<div>-->
     <!--<input ng-model="isolatedFoo"/>-->
     <!--<button class="btn" ng-click="optionSelected({newFoo:isolatedFoo})">Submit</button>-->
@@ -163,19 +167,21 @@
     <div class="navbar">
       <div class="navbar-inner">
         <ul class="nav">
+
           <li>
-            <select ng-model="selected" multiple
+            <select ng-model="selected"
                     ng-options="asset.name group by asset.type for asset in available"/>
           </li>
+
           <li>
-            Selected Assets ...
-            <ul>
-              <li ng-repeat="asset in selected">
-                <a href="http://localhost:3000/tracks?id={{ asset.id }}&type=points&hours=48">
-                  {{ asset.name }}
+            <!--Selected Assets ...-->
+            <!--<ul>-->
+              <!--<li ng-repeat="asset in selected">-->
+                <a href="http://localhost:3000/tracks?id={{ selected.id }}&type=multipoint&hours=1000">
+                  {{ selected.name }}
                 </a>
-              </li>
-            </ul>
+              <!--</li>-->
+            <!--</ul>-->
           </li>
 
           <li class="ctrl">
@@ -183,27 +189,28 @@
             <!--<a id="play-pause" href="#"><i id="play-pause-icon" class="icon-play icon-large"></i></a>-->
           </li>
 
-          <li class="ctrl dropup">
-            <a id="clock-btn" class="clock" data-toggle="dropdown" href="#">
-              <span id="cursor-date"></span><br/>
-              <span id="cursor-time"></span>
-            </a>
+          <!--<li class="ctrl dropup">-->
+            <!--<a id="clock-btn" class="clock" data-toggle="dropdown" href="#">-->
+              <!--<span id="cursor-date"></span><br/>-->
+              <!--<span id="cursor-time"></span>-->
+            <!--</a>-->
 
-            <div class="dropdown-menu" role="menu" aria-labelledby="clock-btn">
-              <label>Playback Cursor Time</label>
+            <!--<div class="dropdown-menu" role="menu" aria-labelledby="clock-btn">-->
+              <!--<label>Playback Cursor Time</label>-->
 
-              <div class="input-append bootstrap-timepicker">
-                <input id="timepicker" type="text" class="input-small span2">
-                <span class="add-on"><i class="icon-time"></i></span>
-              </div>
-              <div id="calendar"></div>
-              <div class="input-append">
-                <input id="date-input" type="text" class="input-small">
-                <span class="add-on"><i class="icon-calendar"></i></span>
-              </div>
-            </div>
-          </li>
+              <!--<div class="input-append bootstrap-timepicker">-->
+                <!--<input id="timepicker" type="text" class="input-small span2">-->
+                <!--<span class="add-on"><i class="icon-time"></i></span>-->
+              <!--</div>-->
+              <!--<div id="calendar"></div>-->
+              <!--<div class="input-append">-->
+                <!--<input id="date-input" type="text" class="input-small">-->
+                <!--<span class="add-on"><i class="icon-calendar"></i></span>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</li>-->
         </ul>
+        <!--
         <ul class="nav pull-right">
           <li>
             <div id="time-slider"></div>
@@ -223,18 +230,13 @@
             <a id="load-tracks-btn" href="#"><i class="icon-map-marker icon-large"></i> Tracks</a>
           </li>
         </ul>
+        -->
       </div>
     </div>
-  </div>
+  <!--</div>-->
 </script>
 
 <div ng-controller="Playback">
-
-  <div>
-    <leaflet id="map" center="canberra" defaults="defaults">
-      <!--<playback-control />-->
-    </leaflet>
-  </div>
 
   <div class="well">
     <!--{{ asset }}-->
@@ -270,6 +272,13 @@
     </my-component>
  -->
   </div>
+
+  <div>
+    <leaflet id="playback" center="canberra" defaults="defaults">
+      <!--<playback-control />-->
+    </leaflet>
+  </div>
+
 
   <!--<select ng-model="asset" ng-options="a.assetRegn group by a.assetType for a in assets"/>-->
   <!--<nafc-asset-selector assets="assets" select="select(asset)"/>-->

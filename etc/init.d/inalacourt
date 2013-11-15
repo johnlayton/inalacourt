@@ -12,28 +12,29 @@
 # Source function library.
 . /lib/lsb/init-functions
 
+USER=__user__
 APP=__application__
 DIR=__directory__
 USR=__username__
 PWD=__password__
 
 start() {
-   su - root -c "cd $DIR && GATEWAY_USERNAME=$USR GATEWAY_PASSWORD=$PWD PORT=80 NODE_ENV=production forever start $APP"
+   su - $USER -c "cd $DIR && GATEWAY_USERNAME=$USR GATEWAY_PASSWORD=$PWD PORT=80 NODE_ENV=production authbind --deep forever start $APP"
    RETVAL=$?
 }
 
 restart() {
-	su - root -c "cd $DIR && forever restart $APP"
+	su - $USER -c "cd $DIR && forever restart $APP"
 	RETVAL=$?
 }
 
 stop() {
-   su - root -c "cd $DIR && forever stop $APP"
+   su - $USER -c "cd $DIR && forever stop $APP"
    RETVAL=$?
 }
 
 status() {
-   su - root -c "cd $DIR && forever list"
+   su - $USER -c "cd $DIR && forever list"
    RETVAL=$?
 }
 

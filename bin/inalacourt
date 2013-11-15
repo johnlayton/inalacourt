@@ -68,6 +68,8 @@ bower install
 mkdir -p /etc/init.d
 cp ./etc/init.d/inalacourt /etc/init.d/.
 cwd=$(pwd)
+user=$(whoami)
+sed -i -e "s/__user__/${user}/g" /etc/init.d/inalacourt
 sed -i -e "s/__directory__/${cwd//\//\\/}/g" /etc/init.d/inalacourt
 sed -i -e "s/__username__/$1/g" /etc/init.d/inalacourt
 sed -i -e "s/__password__/$2/g" /etc/init.d/inalacourt
