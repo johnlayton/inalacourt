@@ -20,8 +20,7 @@ var connect = require ( 'connect' )
   , emap = require ( './lib/inalacourt.emap.js' )
   , emap_tiles = require ( './lib/inalacourt.emap.tiles.js' )
   , georss = require ( './lib/inalacourt.georss.js' )
-  , esrijson = require ( './lib/inalacourt.esri2json.js' )
-  , nswData = require ( './data/nsw_data.json' );
+  , esrijson = require ( './lib/inalacourt.esri2json.js' );
 
 var app = express ();
 
@@ -72,6 +71,10 @@ var libs = {
     options : { expose : 'socket.io' }
   },
 
+  geoutil : {
+    library : './lib/inalacourt.leaflet.geoutil.js',
+    options : { expose : 'geoutil' }
+  },
   notifications : {
     library : './lib/inalacourt.leaflet.notifications.js',
     options : { expose : 'notifications' }
@@ -303,49 +306,6 @@ var server = http.createServer ( app ).listen ( app.get ( 'port' ), "0.0.0.0", f
 } );
 
 /*
- Object representation of the device report
- */
-var extracted = function ( item ) {
-  var nsw_data = lookupNswData ( item.assetRegn );
-  return {
-    identity : item.deviceID,
-    asset : {
-      type : item.assetType,
-      regn : item.assetRegn,
-      name : item.assetName,
-      make : item.assetMake,
-      model : item.assetModel
-    },
-    telemetry : {
-      speed : item.speed,
-      track : item.track,
-      altitude : item.altitude
-    },
-    position : {
-      coords : {
-        latitude : item.latitude,
-        longitude : item.longitude
-      }
-    },
-    arena : nsw_data
-  };
-};
-
-var lookupNswData = function ( regn ) {
-  if ( regn.search ( /VH-.../ ) >= 0 ) {
-    rego_code = regn.match ( /VH-(...)/ )[1];
-    return nswData[ rego_code ];
-  }
-  if ( regn.search ( /N[0-9]{3}[^ ]* / ) >= 0 ) {
-    rego_code = regn.match ( /(N[0-9]{3}[^ ]*) / )[1];
-    return nswData[ rego_code ];
-  }
-  else {
-    return null;
-  }
-};
-
-/*
  Listen for web sockets
  */
 var io = require ( 'socket.io' ).listen ( server );
@@ -354,12 +314,11 @@ io.set ( 'log level', 1 );
 var sockets = io.of ( '/asset' );
 io.sockets.on ( 'connection', function ( socket ) {
   debug ( "Report from Database", "Blah" );
-  database ( 'reports' ).latest ( function ( err, itm ) {
-    socket.emit ( 'position', extracted ( itm ) );
+  database ( 'reports' ).latest ( function ( err, item ) {
+    socket.emit ( 'position', item );
   } );
 } );
 
-/*
 setInterval ( function () {
   var identity = {
     username : app.get ( "username" ),
@@ -372,13 +331,13 @@ setInterval ( function () {
       error ( "Report", err );
     }
     else {
-      database ( 'reports' ).put ( item, function ( err, itm ) {
-        io.sockets.emit ( 'position', extracted ( itm ) );
+      database ( 'reports' ).put ( item, function ( err, item ) {
+        io.sockets.emit ( 'position', item );
       } );
     }
   } );
 }, 10000 );
-*/
+
 /*
  https://emap.dse.vic.gov.au/ArcGIS/rest/services/boundaries/MapServer/2/query?where=OBJECTID+%3E+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=pjson
  https://emap.dse.vic.gov.au/arcgis/rest/services/incidents/MapServer/0/query?where=OBJECTID+%3E+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=pjson
