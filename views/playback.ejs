@@ -1,287 +1,140 @@
-
-<!--<style>-->
-
-  <!--footer.lp {-->
-    <!--position: fixed;-->
-    <!--right: 0;-->
-    <!--left: 0;-->
-    <!--bottom: 10px;-->
-  <!--}-->
-
-  <!--.lp .transport {-->
-    <!--margin: 0 auto;-->
-    <!--width: 768px;-->
-  <!--}-->
-
-  <!--.lp .navbar {-->
-    <!--margin-bottom: 0;-->
-  <!--}-->
-
-  <!--.lp .navbar-inner {-->
-    <!--padding-right: 0;-->
-    <!--padding-left: 0;-->
-  <!--}-->
-
-  <!--.lp #play-pause {-->
-    <!--width: 18px;-->
-  <!--}-->
-
-  <!--.lp #speed-btn {-->
-    <!--width: 58px;-->
-  <!--}-->
-
-  <!--.lp .ui-slider {-->
-    <!--margin: 13px;-->
-  <!--}-->
-
-  <!--.lp #time-slider {-->
-    <!--width: 370px;-->
-  <!--}-->
-
-  <!--.lp #calendar {-->
-    <!--margin: 5px;-->
-  <!--}-->
-
-  <!--.leaflet-control-layers-list {-->
-    <!--margin-bottom: 0;-->
-  <!--}-->
-
-  <!--.lp .speed-menu {-->
-    <!--min-width: 60px;-->
-  <!--}-->
-
-  <!--.lp .dropdown-menu {-->
-    <!--padding: 5px;-->
-    <!--text-align: center;-->
-  <!--}-->
-
-  <!--.lp #speed-slider {-->
-    <!--margin-left: auto;-->
-    <!--margin-right: auto;-->
-  <!--}-->
-
-  <!--.lp .navbar .btn,-->
-  <!--.lp .navbar .btn-group {-->
-    <!--margin-top: 0;-->
-    <!--padding: 0;-->
-  <!--}-->
-
-  <!--.lp .navbar .nav > li > a.clock {-->
-    <!--padding: 0 3px 0 3px;-->
-    <!--text-align: center;-->
-    <!--margin-left: 4px;-->
-    <!--margin-right: 4px;-->
-  <!--}-->
-
-  <!--.lp li.ctrl {-->
-    <!--background-color: #f5f5f5;-->
-    <!--*background-color: #e6e6e6;-->
-    <!--background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6);-->
-    <!--background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));-->
-    <!--background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);-->
-    <!--background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);-->
-    <!--background-image: linear-gradient(top, #ffffff, #e6e6e6);-->
-    <!--background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);-->
-    <!--background-repeat: repeat-x;-->
-    <!--border-right: 1px solid #d4d4d4;-->
-
-    <!---webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);-->
-    <!---moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);-->
-    <!--box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);-->
-  <!--}-->
-
-  <!--.lp .pull-right li.ctrl {-->
-    <!--border-right: 0;-->
-    <!--border-left: 1px solid #d4d4d4;-->
-  <!--}-->
-
-  <!--.lp li.ctrl:hover {-->
-    <!--color: #333333;-->
-    <!--text-decoration: none;-->
-    <!--background-color: #e6e6e6;-->
-    <!--*background-color: #d9d9d9;-->
-    <!--/* Buttons in IE7 don't get borders, so darken on hover */-->
-
-    <!--background-position: 0 -15px;-->
-    <!---webkit-transition: background-position 0.1s linear;-->
-    <!---moz-transition: background-position 0.1s linear;-->
-    <!---ms-transition: background-position 0.1s linear;-->
-    <!---o-transition: background-position 0.1s linear;-->
-    <!--transition: background-position 0.1s linear;-->
-  <!--}-->
-
-    <!--/*.lp li.ctrl:hover a {-->
-      <!--color: #a9ff00;-->
-    <!--}*/-->
-
-  <!--.lp li.ctrl:active {-->
-    <!--background-color: #e6e6e6;-->
-    <!--background-color: #d9d9d9  \9;-->
-    <!--background-image: none;-->
-    <!--outline: 0;-->
-    <!---webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);-->
-    <!---moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);-->
-    <!--box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);-->
-  <!--}-->
-
-  <!--input {-->
-    <!--vertical-align: baseline;-->
-  <!--}-->
-
-  <!--label {-->
-    <!--font-weight: bold;-->
-  <!--}-->
-
-  <!--.navbar .nav > li > .dropdown-menu:before,-->
-  <!--.bootstrap-timepicker-widget.dropdown-menu:before {-->
-    <!--top: auto;-->
-    <!--bottom: -7px;-->
-    <!--border-top: 7px solid #ccc;-->
-    <!--border-bottom: 0;-->
-    <!--border-top-color: rgba(0, 0, 0, 0.2);-->
-  <!--}-->
-
-  <!--.navbar .nav > li > .dropdown-menu:after,-->
-  <!--.bootstrap-timepicker-widget.dropdown-menu:after {-->
-    <!--top: auto;-->
-    <!--bottom: -6px;-->
-    <!--border-top: 6px solid #ffffff;-->
-    <!--border-bottom: 0;-->
-  <!--}-->
-<!--</style>-->
 <style>
-  #map {
-    display: none;
+  .dropdown-menu {
+    z-index: 10000;
+  }
+
+  .dropdown-submenu {
+    position: relative;
+  }
+
+  .dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px 6px;
+    border-radius: 0 6px 6px 6px;
+  }
+
+  .dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-submenu>a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #cccccc;
+    margin-top: 5px;
+    margin-right: -10px;
+  }
+
+  .dropdown-submenu:hover>a:after {
+    border-left-color: #ffffff;
+  }
+
+  .dropdown-submenu.pull-left {
+    float: none;
+  }
+
+  .dropdown-submenu.pull-left>.dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+    -webkit-border-radius: 6px 0 6px 6px;
+    -moz-border-radius: 6px 0 6px 6px;
+    border-radius: 6px 0 6px 6px;
   }
 </style>
 <script type="text/ng-template" id="nafc_playback_control.html">
-  <!--<div id="map-toolbar">-->
-    <!--<div>-->
-    <!--<input ng-model="isolatedFoo"/>-->
-    <!--<button class="btn" ng-click="optionSelected({newFoo:isolatedFoo})">Submit</button>-->
-    <!--<i>// And this calls a function on the parent scope.</i>-->
-    <!--</div>-->
-    <!--<select ng-select="{{ optionSelected( 'hello' ); }}" >-->
-    <!--<option ng-repeat="asset in assets" value="{{ asset.deviceID }}">{{ asset.assetRegn }}</option>-->
-    <!--</select>-->
-    <div class="navbar">
-      <div class="navbar-inner">
-        <ul class="nav">
+  <div class="navbar navbar-default" role="navigation">
+    <div class="">
+      <ul class="nav navbar-nav">
 
-          <li>
-            <select ng-model="selected"
-                    ng-options="asset.name group by asset.type for asset in available"/>
-          </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            {{ selected.name || 'Select Track' }} <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li id="{{ dropdown-category }}" class="dropdown-submenu" ng-repeat="category in ['Aircraft','Helicopter']">
+              <a href="#" class="dropdown-toggle" data-toggle="{{ dropdown-category }}">{{ category }}</a>
+              <ul class="dropdown-menu">
+                <li ng-repeat="asset in available | byType:category | orderBy:'name'">
+                  <a ng-click="select({asset:asset})">{{ asset.name }}</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
 
-          <li>
-            <!--Selected Assets ...-->
-            <!--<ul>-->
-              <!--<li ng-repeat="asset in selected">-->
-                <a href="http://localhost:3000/tracks?id={{ selected.id }}&type=multipoint&hours=1000">
-                  {{ selected.name }}
-                </a>
-              <!--</li>-->
-            <!--</ul>-->
-          </li>
+        <li class="ctrl">
+          <a id="backward"><span class="glyphicon glyphicon-backward"></span></a>
+        </li>
+        <li class="ctrl">
+          <a id="fast-backward"><span class="glyphicon glyphicon-fast-backward"></span></a>
+        </li>
+        <li class="ctrl">
+          <a id="step-backward"><span class="glyphicon glyphicon-step-backward"></span></a>
+        </li>
+        <li class="ctrl">
+          <a id="play" ng-click="toggle()"><span class="glyphicon glyphicon-{{ playing ? 'pause' : 'play' }}"></span></a>
+        </li>
+        <li class="ctrl">
+          <a id="step-forward"><span class="glyphicon glyphicon-step-forward"></span></a>
+        </li>
+        <li class="ctrl">
+          <a id="fast-forward"><span class="glyphicon glyphicon-fast-forward"></span></a>
+        </li>
+        <li class="ctrl">
+          <a id="forward"><span class="glyphicon glyphicon-forward"></span></a>
+        </li>
 
-          <li class="ctrl">
-            <a id="play-pause" ng-click="toggle()"><span class="glyphicon glyphicon-{{ playing ? 'pause' : 'play' }}"></span></a>
-            <!--<a id="play-pause" href="#"><i id="play-pause-icon" class="icon-play icon-large"></i></a>-->
-          </li>
+        <li>
+          <a href="">{{ current.time | date:'medium' }}</a>
+        </li>
 
-          <!--<li class="ctrl dropup">-->
-            <!--<a id="clock-btn" class="clock" data-toggle="dropdown" href="#">-->
-              <!--<span id="cursor-date"></span><br/>-->
-              <!--<span id="cursor-time"></span>-->
-            <!--</a>-->
+      </ul>
 
-            <!--<div class="dropdown-menu" role="menu" aria-labelledby="clock-btn">-->
-              <!--<label>Playback Cursor Time</label>-->
+      <!--
+      <ul class="nav pull-right">
+        <li>
+          <div id="time-slider"></div>
+        </li>
+        <li class="ctrl dropup">
+          <a id="speed-btn" data-toggle="dropdown" href="#"><i class="icon-dashboard icon-large"></i>
+            <span id="speed-icon-val" class="speed">1</span>x</a>
 
-              <!--<div class="input-append bootstrap-timepicker">-->
-                <!--<input id="timepicker" type="text" class="input-small span2">-->
-                <!--<span class="add-on"><i class="icon-time"></i></span>-->
-              <!--</div>-->
-              <!--<div id="calendar"></div>-->
-              <!--<div class="input-append">-->
-                <!--<input id="date-input" type="text" class="input-small">-->
-                <!--<span class="add-on"><i class="icon-calendar"></i></span>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</li>-->
-        </ul>
-        <!--
-        <ul class="nav pull-right">
-          <li>
-            <div id="time-slider"></div>
-          </li>
-          <li class="ctrl dropup">
-            <a id="speed-btn" data-toggle="dropdown" href="#"><i class="icon-dashboard icon-large"></i>
-              <span id="speed-icon-val" class="speed">1</span>x</a>
+          <div class="speed-menu dropdown-menu" role="menu" aria-labelledby="speed-btn">
+            <label>Playback<br/>Speed</label>
+            <input id="speed-input" class="span1 speed" type="text" value="1"/>
 
-            <div class="speed-menu dropdown-menu" role="menu" aria-labelledby="speed-btn">
-              <label>Playback<br/>Speed</label>
-              <input id="speed-input" class="span1 speed" type="text" value="1"/>
-
-              <div id="speed-slider"></div>
-            </div>
-          </li>
-          <li class="ctrl">
-            <a id="load-tracks-btn" href="#"><i class="icon-map-marker icon-large"></i> Tracks</a>
-          </li>
-        </ul>
-        -->
-      </div>
+            <div id="speed-slider"></div>
+          </div>
+        </li>
+        <li class="ctrl">
+          <a id="load-tracks-btn" href="#"><i class="icon-map-marker icon-large"></i> Tracks</a>
+        </li>
+      </ul>
+      -->
     </div>
-  <!--</div>-->
+  </div>
 </script>
 
 <div ng-controller="Playback">
 
-  <div class="well">
-    <!--{{ asset }}-->
-    <nafc-playback-control available="available" selected="selected" playing="playing" toggle="togglePlayback()"/>
-    <!--attribute-foo="{{foo}}" binding-foo="foo"-->
-    <!--option-selected="setAsset(newFoo)"/>-->
-
- <!--
-    <my-component attribute-foo="{{foo}}" binding-foo="foo"
-                  isolated-expression-foo="updateFoo(newFoo)" >
-      <h2>Attribute</h2>
-      <div>
-        <strong>get:</strong> {{isolatedAttributeFoo}}
-      </div>
-      <div>
-        <strong>set:</strong> <input ng-model="isolatedAttributeFoo">
-        <i>// This does not update the parent scope.</i>
-      </div>
-      <h2>Binding</h2>
-      <div>
-        <strong>get:</strong> {{isolatedBindingFoo}}
-      </div>
-      <div>
-        <strong>set:</strong> <input ng-model="isolatedBindingFoo">
-        <i>// This does update the parent scope.</i>
-      </div>
-      <h2>Expression</h2>
-      <div>
-        <input ng-model="isolatedFoo">
-        <button class="btn" ng-click="isolatedExpressionFoo({newFoo:isolatedFoo})">Submit</button>
-        <i>// And this calls a function on the parent scope.</i>
-      </div>
-    </my-component>
- -->
+  <div>
+    <nafc-playback-control available="available" selected="selected" playing="playing" current="current"
+                           select="select(asset)" toggle="togglePlayback()"/>
   </div>
 
   <div>
     <leaflet id="playback" center="canberra" defaults="defaults">
-      <!--<playback-control />-->
     </leaflet>
   </div>
 
-
-  <!--<select ng-model="asset" ng-options="a.assetRegn group by a.assetType for a in assets"/>-->
-  <!--<nafc-asset-selector assets="assets" select="select(asset)"/>-->
-  <!--<nafc-asset-selector assets="assets" attribute-foo="{{foo}}" binding-foo="foo"-->
-  <!--option-selected="setAsset(newFoo)"/>-->
 </div>

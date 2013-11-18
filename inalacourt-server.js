@@ -70,6 +70,10 @@ var libs = {
     library : 'socket.io-browserify',
     options : { expose : 'socket.io' }
   },
+  console : {
+    library : './lib/inalacourt.console.js',
+    options : { expose : 'console' }
+  },
 
   geoutil : {
     library : './lib/inalacourt.leaflet.geoutil.js',
@@ -257,9 +261,6 @@ app.get ( "/details", function ( req, res ) {
 app.get ( "/tracks", function ( req, res ) {
   var agent = req.headers['user-agent'];
   res.set ( "Content-Type", "application/json" );
-
-  console.log( req.param( 'id' ) );
-
   database ( "reports" )
     .list ( ( req.param ( 'id' ) || 1 ), ( req.param ( 'hours' ) || 24 ) )
     .pipe ( geojson ( req.param ( 'type' ) || "multipoint" ) )
