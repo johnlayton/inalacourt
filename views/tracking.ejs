@@ -1,10 +1,10 @@
 <style>
   .leaflet-container {
-    background: black;
+    /*background: black;*/
   }
 
   .leaflet-tile-pane {
-    opacity: 0.65;
+    /*opacity: 0.65;*/
   }
 
   .flyover {
@@ -43,7 +43,7 @@
   }
 </style>
 <div id="container" ng-controller="Tracking">
-  <leaflet center="melbourne" defaults="defaults" layers="layers">
+  <leaflet center="canberra" defaults="defaults">
     <div id="flyover" class="flyover" style="position: absolute; z-index: 5000; top: 0; right: 0; height: 100%;">
       <span id="flyover-toggle" style="cursor: pointer;" ng-click="toggleFlyover()">&lt;</span>
       <div id="flyover-content"></div>

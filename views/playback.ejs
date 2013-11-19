@@ -58,7 +58,7 @@
 
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            {{ selected.name || 'Select Track' }} <b class="caret"></b>
+            {{ selected.name || 'Select Asset' }} <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
             <li id="{{ dropdown-category }}" class="dropdown-submenu" ng-repeat="category in ['Aircraft','Helicopter']">
@@ -94,33 +94,20 @@
           <a id="forward"><span class="glyphicon glyphicon-forward"></span></a>
         </li>
 
-        <li>
-          <a href="">{{ current.time | date:'medium' }}</a>
-        </li>
+        <!--<li>-->
+        <!--<a href="">{{ current.time | date:'medium' }}</a>-->
+        <!--</li>-->
 
-      </ul>
-
-      <!--
-      <ul class="nav pull-right">
-        <li>
-          <div id="time-slider"></div>
-        </li>
-        <li class="ctrl dropup">
-          <a id="speed-btn" data-toggle="dropdown" href="#"><i class="icon-dashboard icon-large"></i>
-            <span id="speed-icon-val" class="speed">1</span>x</a>
-
-          <div class="speed-menu dropdown-menu" role="menu" aria-labelledby="speed-btn">
-            <label>Playback<br/>Speed</label>
-            <input id="speed-input" class="span1 speed" type="text" value="1"/>
-
-            <div id="speed-slider"></div>
-          </div>
-        </li>
-        <li class="ctrl">
-          <a id="load-tracks-btn" href="#"><i class="icon-map-marker icon-large"></i> Tracks</a>
+        <li class="dropdown">
+          <a class="dropdown-toggle" id="datepicker-dropdown" role="button" data-toggle="dropdown" data-target="#" href="#">
+            {{ current.time | date:'medium' }} <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <datetimepicker data-ng-model="current.time"
+                            data-datetimepicker-config="{ dropdownSelector: '#datepicker-dropdown' }"></datetimepicker>
+          </ul>
         </li>
       </ul>
-      -->
     </div>
   </div>
 </script>
@@ -129,11 +116,12 @@
 
   <div>
     <nafc-playback-control available="available" selected="selected" playing="playing" current="current"
-                           select="select(asset)" toggle="togglePlayback()"/>
+                           select="selectAsset(asset)" toggle="togglePlayback()"/>
   </div>
 
   <div>
     <leaflet id="playback" center="canberra" defaults="defaults">
+      <!--<my-map />-->
     </leaflet>
   </div>
 
