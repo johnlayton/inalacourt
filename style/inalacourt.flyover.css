@@ -4,7 +4,15 @@
   padding: 0;
 }
 
-#body.flyover-open #flyover {
+.rotate {
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+
+#container.flyover-open #flyover {
   padding-left: 5px;
   width: 200px;
 }
@@ -13,15 +21,15 @@
   width: 0;
 }
 
-#body.flyover-open #flyover-content {
+#container.flyover-open #flyover-content {
   width: 100%;
 }
 
-#body .leaflet-right {
+#container .leaflet-right {
   margin-right: 10px;
 }
 
-#body.flyover-open .leaflet-right {
+#container.flyover-open .leaflet-right {
   margin-right: 205px;
 }
 
