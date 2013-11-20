@@ -103,17 +103,18 @@ var libs = {
     library : './lib/inalacourt.leaflet.dynamarker.js',
     options : { expose : 'dynamarker' }
   },
+  clusters : {
+    library : './lib/inalacourt.leaflet.clusters.js',
+    options : { expose : 'clusters' }
+  },
+  information : {
+    library : './lib/inalacourt.leaflet.information.js',
+    options : { expose : 'information' }
+  },
 
   extensions : {
     library : './lib/inalacourt.angular.extensions.js',
     options : { expose : 'extensions' }
-  clusters : {
-    library : './lib/inalacourt.clusters.js',
-    options : { expose : 'clusters' }
-  },
-  information : {
-    library : './lib/inalacourt.information.js',
-    options : { expose : 'information' }
   },
   directives : {
     library : './lib/inalacourt.angular.directives.js',
