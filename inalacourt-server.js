@@ -66,6 +66,10 @@ var libs = {
     library : 'util',
     options : { expose : 'util' }
   },
+  lodash : {
+    library : 'lodash',
+    options : { expose : 'lodash' }
+  },
   io : {
     library : 'socket.io-browserify',
     options : { expose : 'socket.io' }
@@ -298,11 +302,12 @@ app.get ( "/browserify.js", function ( req, res ) {
              b.require ( libs[include].library )
     }, browser () )
     .transform ( 'brfs' )
-    .bundle ( function ( err, src ) {
+    .bundle ( /*function ( err, src ) {
     if ( err ) {
+      console.log( src )
       error ( "Browserify Bundle", err )
     }
-  } )
+  } */)
     .pipe ( oppressor ( req ) )
     .pipe ( res )
 } );
