@@ -11,14 +11,6 @@ div.platform-properties .title {
   text-shadow: -1px -1px 1px #CCC, 1px -1px 1px #CCC, -1px 1px 1px #CCC, 1px 1px 1px #CCC;
   font-weight: bolder;
   white-space: nowrap;
-  /*width: 100%;*/
-  /*text-align: center;*/
-  /*font-weight: bold;*/
-  /*font-size: large;*/
-  /*color: firebrick;*/
-  /*clear: both;*/
-  /*display: block;*/
-  /*text-transform: capitalize;*/
 }
 
 div.platform-properties dl {

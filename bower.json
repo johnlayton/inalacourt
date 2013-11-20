@@ -1,0 +1,27 @@
+{
+  "name": "inalacourt",
+  "version": "0.0.0",
+  "dependencies": {
+    "angular"                          : "latest",
+    "angular-slider"                   : "latest",
+    "angular-rangeslider"              : "latest",
+    "angular-bootstrap-datetimepicker" : "latest",
+    "angular-route"                    : "latest",
+    "angular-resource"                 : "latest",
+    "angular-socket-io"                : "latest",
+    "angular-leaflet-directive"        : "latest",
+    "leaflet"                          : "latest",
+    "json3"                            : "latest",
+    "jquery"                           : "latest",
+    "jquery-ui"                        : "latest",
+    "bootstrap"                        : "latest",
+    "es5-shim"                         : "latest"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.0.7",
+    "angular-scenario": "~1.0.7"
+  },
+  "resolutions": {
+    "angular": "~1.2.0-rc.3"
+  }
+}

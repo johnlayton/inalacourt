@@ -4,12 +4,23 @@
   "description": "",
   "main": "inalacourt-server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "nodemon -w . -w views inalacourt-server.js"
+    "debug"   : "nodemon -w . -w views inalacourt-server.js",
+    "start"   : "forever start -o ./out.log -e ./err.log inalacourt-server.js",
+    "stop"    : "forever stop inalacourt-server.js"
+  },
+  "repository" : {
+    "type" : "git",
+    "url"  : "https://github.com/johnlayton/inalacourt.git"
   },
   "author": "johnstewartlayton@gmail.com",
   "license": "",
   "dependencies": {
+    "lodash"               : "*",
+    "nodemon"              : "*",
+    "uuid"                 : "*",
+    "wordwrap"             : "*",
+    "optimist"             : "*",
+    "npm"                  : "*",
     "connect"              : "*",
     "domready"             : "*",
     "browserify"           : "*",
@@ -19,6 +30,9 @@
     "colors"               : "*",
     "express"              : "*",
     "ejs"                  : "*",
+    "sphericalmercator"    : "*",
+    "proj4"                : "*",
+    "proj4js-defs"         : "*",
     "socket.io"            : "*",
     "socket.io-client"     : "*",
     "socket.io-browserify" : "*",

@@ -1,0 +1,10 @@
+usage:
+
+  inalacourt -h
+
+    Show a this help.
+ 
+  inalacourt run [username] [password]
+
+    Run inalacourt server.
+    

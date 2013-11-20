@@ -1,0 +1,148 @@
+<style>
+  .dropdown-menu {
+    z-index: 10000;
+  }
+
+  .dropdown-submenu {
+    position: relative;
+  }
+
+  .dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px 6px;
+    border-radius: 0 6px 6px 6px;
+  }
+
+  .dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-submenu>a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #cccccc;
+    margin-top: 5px;
+    margin-right: -10px;
+  }
+
+  .dropdown-submenu:hover>a:after {
+    border-left-color: #ffffff;
+  }
+
+  .dropdown-submenu.pull-left {
+    float: none;
+  }
+
+  .dropdown-submenu.pull-left>.dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+    -webkit-border-radius: 6px 0 6px 6px;
+    -moz-border-radius: 6px 0 6px 6px;
+    border-radius: 6px 0 6px 6px;
+  }
+</style>
+<script type="text/ng-template" id="nafc_playback_control.html">
+  <div class="navbar navbar-default" role="navigation">
+    <div class="">
+      <ul class="nav navbar-nav">
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            {{ selected.name || 'Select Asset' }} <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li id="{{ dropdown-category }}" class="dropdown-submenu" ng-repeat="category in ['Aircraft','Helicopter']">
+              <a href="#" class="dropdown-toggle" data-toggle="{{ dropdown-category }}">{{ category }}</a>
+              <ul class="dropdown-menu">
+                <li ng-repeat="asset in available | byType:category | orderBy:'name'">
+                  <a ng-click="select({asset:asset})">{{ asset.name }}</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+
+        <li class="ctrl">
+          <a id="backward"><span class="glyphicon glyphicon-backward"></span></a>
+        </li>
+        <li class="ctrl">
+          <a id="fast-backward"><span class="glyphicon glyphicon-fast-backward"></span></a>
+        </li>
+        <li class="ctrl">
+          <a id="step-backward"><span class="glyphicon glyphicon-step-backward"></span></a>
+        </li>
+        <li class="ctrl">
+          <a id="play" ng-click="toggle()"><span class="glyphicon glyphicon-{{ playing ? 'pause' : 'play' }}"></span></a>
+        </li>
+        <li class="ctrl">
+          <a id="step-forward"><span class="glyphicon glyphicon-step-forward"></span></a>
+        </li>
+        <li class="ctrl">
+          <a id="fast-forward"><span class="glyphicon glyphicon-fast-forward"></span></a>
+        </li>
+        <li class="ctrl">
+          <a id="forward"><span class="glyphicon glyphicon-forward"></span></a>
+        </li>
+
+        <!--<li>-->
+        <!--<a href="">{{ current.time | date:'medium' }}</a>-->
+        <!--</li>-->
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" id="datepicker-dropdown" role="button" data-toggle="dropdown" data-target="#" href="#">
+            {{ current.time | date:'medium' }} <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <datetimepicker data-ng-model="current.time"
+                            data-datetimepicker-config="{ dropdownSelector: '#datepicker-dropdown' }"></datetimepicker>
+          </ul>
+        </li>
+
+        <!--
+        <li>
+          <ul>
+            <p>Name: {{position.name}}</p>
+            <p>Name: {{position.minAge}}</p>
+            <p>Name: {{position.maxAge}}</p>
+            <slider floor="10" ceiling="60" ng-model-low="position.minAge" ng-model-high="position.maxAge"></slider>
+          </ul>
+        </li>
+        -->
+        <li>
+
+          <!--<input type="range" step="1" min="0" max="100" />-->
+        </li>
+      </ul>
+    </div>
+    <!--
+    <div>
+      <div range-slider min="0" max="100" model-min="position.minAge" model-max="position.maxAge"></div>
+    </div>
+    -->
+  </div>
+</script>
+
+<div ng-controller="Playback">
+
+  <div>
+    <nafc-playback-control available="available" selected="selected" playing="playing" current="current"
+                           select="selectAsset(asset)" toggle="togglePlayback()"/>
+  </div>
+
+  <div>
+    <leaflet id="playback" center="canberra" defaults="defaults">
+      <!--<my-map />-->
+    </leaflet>
+  </div>
+
+</div>
