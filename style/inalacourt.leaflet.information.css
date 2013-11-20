@@ -1,4 +1,13 @@
 .leaflet-control-information {
-  padding: 5px;
-  background: white;
+  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.4);
+  background: #f8f8f9;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  max-height: 400px;
+  overflow-y: auto;
 }
+
+.leaflet-control-information .leaflet-control-flyover-list {
+  display: none;
+}
+
