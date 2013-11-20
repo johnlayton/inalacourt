@@ -1,31 +1,33 @@
 <div ng-controller="Overview">
-  <leaflet center="canberra" defaults="defaults" layer="layers" >
+  <div class="well">
+    <form class="form-inline" role="form">
+      <div class="form-group">
+        <div class="control-group col col-lg-3">
+          <div class="input-group">
+            <span class="input-group-addon">lat</span>
+            <input class="form-control" type="number" step="any" ng-model="canberra.lat" />
+          </div>
+        </div>
+        <div class="control-group col col-lg-3">
+          <div class="input-group">
+            <span class="input-group-addon">lon</span>
+            <input class="form-control" type="number" step="any" ng-model="canberra.lng" />
+          </div>
+        </div>
+        <div class="control-group col col-lg-3">
+          <div class="input-group">
+            <span class="input-group-addon">zoom</span>
+            <input class="form-control"  type="number" ng-model="canberra.zoom" />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <leaflet id="overview" center="canberra" defaults="defaults" layer="layers" >
     <!--layers="layers"-->
     <!--<dyna-markers />-->
     <fullscreen position="topleft" />
     <!--<information position="topright" />-->
     <!--<notifications position="topright" />-->
   </leaflet>
-  <form class="form-inline" role="form">
-    <div class="form-group">
-      <div class="control-group col col-lg-3">
-        <div class="input-group">
-          <span class="input-group-addon">lat</span>
-          <input class="form-control" type="number" step="any" ng-model="canberra.lat" />
-        </div>
-      </div>
-      <div class="control-group col col-lg-3">
-        <div class="input-group">
-          <span class="input-group-addon">lon</span>
-          <input class="form-control" type="number" step="any" ng-model="canberra.lng" />
-        </div>
-      </div>
-      <div class="control-group col col-lg-3">
-        <div class="input-group">
-          <span class="input-group-addon">zoom</span>
-          <input class="form-control"  type="number" ng-model="canberra.zoom" />
-        </div>
-      </div>
-    </div>
-  </form>
 </div>
