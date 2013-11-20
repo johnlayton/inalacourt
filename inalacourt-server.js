@@ -252,7 +252,7 @@ app.get ( "/details", function ( req, res ) {
   var agent = req.headers['user-agent'];
   res.set ( "Content-Type", "application/json" );
   database ( "reports" )
-    .list ( ( req.param ( 'id' ) || 1 ), ( req.param ( 'hours' ) || 24 ) )
+    .list ( ( req.param ( 'id' ) || 1 ), req.param ( 'hours' ) )
     .pipe ( geojson ( req.param ( 'type' ) || "points" ) )
     .pipe ( oppressor ( req ) )
     .pipe ( res )
@@ -262,7 +262,7 @@ app.get ( "/tracks", function ( req, res ) {
   var agent = req.headers['user-agent'];
   res.set ( "Content-Type", "application/json" );
   database ( "reports" )
-    .list ( ( req.param ( 'id' ) || 1 ), ( req.param ( 'hours' ) || 24 ) )
+    .list ( ( req.param ( 'id' ) || 1 ), req.param ( 'hours' ) )
     .pipe ( geojson ( req.param ( 'type' ) || "multipoint" ) )
     .pipe ( oppressor ( req ) )
     .pipe ( res )
