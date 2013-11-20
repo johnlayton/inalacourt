@@ -20,12 +20,14 @@
     <link rel="stylesheet" href="/dist/leaflet/leaflet.fullscreen.css"/>
     <link rel="stylesheet" href="/dist/leaflet/leaflet.search.css"/>
     <link rel="stylesheet" href="/dist/leaflet/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="/dist/leaflet/leaflet.markercluster.css"/>
 
     <link rel="stylesheet" href="/style/inalacourt.leaflet.information.css"/>
     <link rel="stylesheet" href="/style/inalacourt.leaflet.notifications.css"/>
     <link rel="stylesheet" href="/style/inalacourt.leaflet.navigation.css"/>
 
     <link rel="stylesheet" href="/style/inalacourt.incident.css"/>
+    <link rel="stylesheet" href="/style/inalacourt.clusters.css"/>
     <link rel="stylesheet" href="/style/inalacourt.markers.css"/>
     <link rel="stylesheet" href="/style/inalacourt.platform.css"/>
 
@@ -48,6 +50,7 @@
     <script src="/dist/leaflet/leaflet.ajax.js"></script>
     <script src="/dist/leaflet/leaflet.awesome-markers.js"></script>
     <script src="/dist/leaflet/leaflet.playback.js"></script>
+    <script src="/dist/leaflet/leaflet.markercluster.js"></script>
 
     <% if ( agent.indexOf( 'Mobile' ) > 0 ) {%>
     <script src="/dist/cordova-2.3.0.js"></script>
@@ -75,6 +78,7 @@
       var z = require ( "notifications" );
       var n = require ( "navigation" );
       var m = require ( "dynamarker" );
+      var x = require ( 'clusters' );
 
       //var e = require ( "extensions" )( angular );
       var b = require ( "directives" )( angular );

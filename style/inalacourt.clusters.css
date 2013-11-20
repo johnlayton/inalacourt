@@ -12,13 +12,13 @@
 }
 
 .leaflet-control-clusters-toggle {
-  background-image: url(/dist/images/layers.png);
+  background-image: url(/dist/leaflet/images/layers.png);
   width: 36px;
   height: 36px;
 }
 
 .leaflet-retina .leaflet-control-clusters-toggle {
-  background-image: url(/dist/images/layers-2x.png);
+  background-image: url(/dist/leaflet/images/layers-2x.png);
   background-size: 26px 26px;
 }
 
