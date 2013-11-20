@@ -326,7 +326,6 @@ io.set ( 'log level', 1 );
 
 var sockets = io.of ( '/asset' );
 io.sockets.on ( 'connection', function ( socket ) {
-  debug ( "Report from Database", "Blah" );
   database ( 'reports' ).latest ( function ( err, item ) {
     socket.emit ( 'position', item );
   } );
@@ -338,7 +337,6 @@ setInterval ( function () {
     password : app.get ( "password" )
   };
   report ( identity, function ( err, item ) {
-    debug ( "On...", util.inspect ( item ) );
     if ( err ) {
       error ( "Report", err );
     }
