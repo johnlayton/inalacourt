@@ -108,12 +108,8 @@ var libs = {
     options : { expose : 'clusters' }
   },
   flyover : {
-    library : './lib/inalacourt.flyover.js',
+    library : './lib/inalacourt.leaflet.flyover.js',
     options : { expose : 'flyover' }
-  },
-  information : {
-    library : './lib/inalacourt.leaflet.information.js',
-    options : { expose : 'information' }
   },
 
   extensions : {
