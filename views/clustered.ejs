@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+  <head>
+    <title><%= title %></title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+    <link rel="stylesheet" href="/dist/leaflet.css"/>
+    <link rel="stylesheet" href="/dist/leaflet.fullscreen.css"/>
+    <link rel="stylesheet" href="/dist/leaflet.search.css"/>
+    <link rel="stylesheet" href="/dist/leaflet.markercluster.css"/>
+
+    <link rel="stylesheet" href="/style/inalacourt.map.css"/>
+    <link rel="stylesheet" href="/style/inalacourt.clusters.css"/>
+    <link rel="stylesheet" href="/style/inalacourt.flyover.css"/>
+    <link rel="stylesheet" href="/style/inalacourt.information.css"/>
+    <link rel="stylesheet" href="/style/inalacourt.incident.css"/>
+    <link rel="stylesheet" href="/style/inalacourt.notifications.css"/>
+    <link rel="stylesheet" href="/style/inalacourt.markers.css"/>
+    <link rel="stylesheet" href="/style/inalacourt.platform.css"/>
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/dist/leaflet.ie.css"/>
+    <![endif]-->
+
+    <script src="/dist/leaflet-src.js"></script>
+    <script src="/dist/leaflet.fullscreen.js"></script>
+    <script src="/dist/leaflet.hash.js"></script>
+    <script src="/dist/leaflet.search.js"></script>
+    <script src="/dist/leaflet.ajax.js"></script>
+    <script src="/dist/leaflet.markercluster.js"></script>
+
+    <% if ( agent.indexOf( 'Mobile' ) > 0 ) {%>
+    <script src="/dist/cordova-2.3.0.js"></script>
+    <% } else { %>
+    <% } %>
+  </head>
+  <body id="body">
+    <div id="map" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
+
+    <script src="/browserify/load?libs=util,io,template,notifications,dynamarker,information,clusters"></script>
+    <script>
+      var i = require ( 'socket.io' );
+      var t = require ( 'template' );
+      var u = require ( 'util' );
+      var n = require ( 'notifications' );
+      var d = require ( 'dynamarker' );
+      var x = require ( 'clusters' );
+    </script>
+    <script>
+
+      var b = "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/";
+      var f = '/{z}/{x}/{y}.png';
+      var g = '/{z}/{y}/{x}.png';
+
+      var map = L.map ( 'map', {
+        attributionControl : false
+      } ).setView ( [-37.8, 144.9], 5 );
+
+
+      var underlays = {
+        "arcgis" : L.tileLayer ( b + g, { maxZoom : 18 } ).addTo ( map )
+      };
+
+      var overlays = {
+        "fire truck"        : new L.LayerGroup(),
+        "aircraft"          : new L.LayerGroup(),
+        "helicopter"        : new L.LayerGroup(),
+        "passenger vehicle" : new L.LayerGroup(),
+        "person"            : new L.LayerGroup(),
+        "truck"             : new L.LayerGroup()
+      };
+
+      var icon = function ( data ) {
+        return "http://stocksoftware.com.au/images/logo.png";
+      };
+
+      var title = function ( data ) {
+        return data.asset.regn;
+      };
+
+      var message = function ( previous, current ) {
+        return "From [" + previous + "]\nTo [" + current + "]";
+      };
+
+      var create_icon = function ( data ) {
+        return L.dynaIcon ( { markers : t.markers, data : data } )
+      };
+
+      var assets = {};
+      i.connect ( "/asset", { transports : ['websocket'] } )
+          .on ( 'position', function ( data ) {
+        var position = L.latLng (
+            data.position.coords.latitude,
+            data.position.coords.longitude );
+        if ( !assets[data.identity] ) {
+          var marker = L.dynaMarker ( position, {
+            icon : create_icon ( data ),
+            title : title ( data ),
+            properties : data
+          } );
+          marker.addTo ( overlays[ data.asset.type.toLocaleLowerCase()/*.replace( / /g, '_' )*/ ] );
+          marker.on ( 'mouseover', function ( e ) {
+            map.addLayer ( e.target.options.track =
+                           e.target.options.track ||
+                           L.geoJson.ajax ( '/details?id=' + data.identity + '&type=linestring&hours=48', { } ) );
+          } );
+          marker.on ( 'mouseout', function ( e ) {
+            map.removeLayer ( e.target.options.track );
+          } );
+          assets[data.identity] = marker;
+        }
+        else {
+          var marker = assets[data.identity];
+          if ( marker.getLatLng ().lat != position.lat ||
+               marker.getLatLng ().lng != position.lng ) {
+            map.notification ( icon ( data ), title ( data ), message ( marker.getLatLng (), position ) );
+            if ( marker.options.track ) {
+              marker.options.track.refresh ();
+            }
+            marker.setIcon ( create_icon ( data ) );
+            marker.setLatLng ( position )
+          }
+        }
+      } );
+
+      L.control.clusters( underlays, overlays, { html : t.clustered } ).addTo( map );
+
+    </script>
+  </body>
+</html>
