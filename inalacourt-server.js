@@ -107,6 +107,10 @@ var libs = {
     library : './lib/inalacourt.leaflet.clusters.js',
     options : { expose : 'clusters' }
   },
+  flyover : {
+    library : './lib/inalacourt.flyover.js',
+    options : { expose : 'flyover' }
+  },
   information : {
     library : './lib/inalacourt.leaflet.information.js',
     options : { expose : 'information' }
@@ -253,7 +257,7 @@ app.get ( "/regions", function ( req, res ) {
     .pipe ( res )
   var file = path.join ( "data", "regions.json" );
   handler.write ( esrijson ( fsx.readJsonFileSync ( file ) ) );
-  handler.end ();
+  handler.end ( );
 } );
 
 app.get ( "/details", function ( req, res ) {
@@ -347,9 +351,6 @@ setInterval ( function () {
 }, 10000 );
 
 /*
- https://emap.dse.vic.gov.au/ArcGIS/rest/services/boundaries/MapServer/2/query?where=OBJECTID+%3E+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=pjson
- https://emap.dse.vic.gov.au/arcgis/rest/services/incidents/MapServer/0/query?where=OBJECTID+%3E+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=pjson
- https://emap.dse.vic.gov.au/arcgis/rest/services/todays_incidents/MapServer/0/query?where=OBJECTID+%3E+0&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=pjson
  Regions -> https://emap.dse.vic.gov.au/ArcGIS/rest/services/boundaries/MapServer/2/query?returnGeometry=true&spatialRel=esriSpatialRelIntersects&where=1+%3d+1&outSR=4326&outFields=*&f=json&
  Burns   -> https://emap.dse.vic.gov.au/ArcGIS/rest/services/phoenix/MapServer/1/query?returnGeometry=true&spatialRel=esriSpatialRelIntersects&where=1+%3d+1&outSR=4326&outFields=*&f=json&
  */

@@ -1,0 +1,36 @@
+/* flyover control */
+.leaflet-control-flyover {
+  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.4);
+  background: #f8f8f9;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.leaflet-control-flyover .leaflet-control-flyover-list {
+  display: none;
+}
+
+.leaflet-control-flyover-expanded .leaflet-control-flyover-list {
+  display: block;
+  position: relative;
+}
+
+.leaflet-control-flyover-expanded .leaflet-control-flyover-list a {
+  display: block;
+  position: relative;
+  clear: both;
+}
+
+.leaflet-control-flyover-expanded {
+  padding: 6px 10px 6px 6px;
+  color: #333;
+  background: #fff;
+}
+
+.leaflet-touch .leaflet-control-attribution,
+.leaflet-touch .leaflet-control-flyover,
+.leaflet-touch .leaflet-bar {
+  box-shadow: none;
+}
