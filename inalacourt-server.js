@@ -107,6 +107,13 @@ var libs = {
   extensions : {
     library : './lib/inalacourt.angular.extensions.js',
     options : { expose : 'extensions' }
+  clusters : {
+    library : './lib/inalacourt.clusters.js',
+    options : { expose : 'clusters' }
+  },
+  information : {
+    library : './lib/inalacourt.information.js',
+    options : { expose : 'information' }
   },
   directives : {
     library : './lib/inalacourt.angular.directives.js',
@@ -325,7 +332,6 @@ setInterval ( function () {
     username : app.get ( "username" ),
     password : app.get ( "password" )
   };
-  debug ( "Report", util.inspect ( identity ) );
   report ( identity, function ( err, item ) {
     debug ( "On...", util.inspect ( item ) );
     if ( err ) {

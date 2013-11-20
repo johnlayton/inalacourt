@@ -1,0 +1,88 @@
+.leaflet-control-clusters-toggle {
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  display: block;
+}
+
+.leaflet-control-clusters {
+  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.4);
+  background: #f8f8f9;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.leaflet-control-clusters-toggle {
+  background-image: url(/dist/images/layers.png);
+  width: 36px;
+  height: 36px;
+}
+
+.leaflet-retina .leaflet-control-clusters-toggle {
+  background-image: url(/dist/images/layers-2x.png);
+  background-size: 26px 26px;
+}
+
+.leaflet-touch .leaflet-control-clusters-toggle {
+  width: 44px;
+  height: 44px;
+}
+
+.leaflet-control-clusters .leaflet-control-clusters-list,
+.leaflet-control-clusters-expanded .leaflet-control-clusters-toggle {
+  display: none;
+}
+
+.leaflet-control-clusters-expanded .leaflet-control-clusters-list {
+  display: block;
+  position: relative;
+}
+
+.leaflet-control-clusters-expanded {
+  padding: 6px 10px 6px 6px;
+  color: #333;
+  background: #fff;
+}
+
+.leaflet-control-clusters-selector {
+  margin-top: 2px;
+  position: relative;
+  top: 1px;
+}
+
+.leaflet-control-clusters label {
+  display: block;
+}
+
+.leaflet-control-clusters-separator {
+  height: 0;
+  border-top: 1px solid #ddd;
+  margin: 5px -10px 5px -6px;
+}
+
+
+div.cluster-icon div.cluster {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border: darkgray 1px solid;
+  background-color: lightgray;
+  opacity: 0.5;
+  color: black;
+  padding: 3px;
+}
+
+div.cluster-icon div.cluster:hover {
+  opacity: 1;
+}
+
+div.cluster-icon div.cluster div.details {
+  text-align: center;
+  margin: 5px auto;
+}
+
+div.cluster-icon div.cluster div.detail {
+  margin: 0px 5px;
+  display: inline-block;
+  text-decoration: none;
+  color: black;
+  font-weight: bolder;
+}
