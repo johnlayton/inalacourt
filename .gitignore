@@ -1,4 +1,5 @@
 dist/components/*
+dist/_components/*
 dist/angular/*
 node_modules/*
 data/reports/*
