@@ -1,7 +1,7 @@
 .leaflet-container {
-  /*background: black;*/
+  background: black;
 }
 
 .leaflet-tile-pane {
-  /*opacity: 0.65;*/
+  opacity: 0.65;
 }
