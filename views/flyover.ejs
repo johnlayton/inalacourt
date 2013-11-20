@@ -1,0 +1,225 @@
+<!doctype html>
+<html>
+<head>
+  <title><%= title %></title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+  <link rel="stylesheet" href="/dist/leaflet.css"/>
+  <link rel="stylesheet" href="/dist/leaflet.fullscreen.css"/>
+  <link rel="stylesheet" href="/dist/leaflet.search.css"/>
+
+  <link rel="stylesheet" href="/style/inalacourt.map.css"/>
+  <link rel="stylesheet" href="/style/inalacourt.flyover.css"/>
+  <link rel="stylesheet" href="/style/inalacourt.information.css"/>
+  <link rel="stylesheet" href="/style/inalacourt.incident.css"/>
+  <link rel="stylesheet" href="/style/inalacourt.notifications.css"/>
+  <link rel="stylesheet" href="/style/inalacourt.markers.css"/>
+  <link rel="stylesheet" href="/style/inalacourt.platform.css"/>
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="/dist/leaflet.ie.css"/>
+  <![endif]-->
+
+  <script src="/dist/leaflet-src.js"></script>
+  <script src="/dist/leaflet.fullscreen.js"></script>
+  <script src="/dist/leaflet.hash.js"></script>
+  <script src="/dist/leaflet.search.js"></script>
+  <script src="/dist/leaflet.ajax.js"></script>
+
+  <% if ( agent.indexOf( 'Mobile' ) > 0 ) {%>
+  <script src="/dist/cordova-2.3.0.js"></script>
+  <% } else { %>
+  <% } %>
+  <style>
+    .information {
+      padding: 6px 8px;
+      font: 14px/16px Arial, Helvetica, sans-serif;
+      background: white;
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+    }
+
+    .info h4 {
+      margin: 0 0 5px;
+      color: #777;
+    }
+
+    .legend {
+      text-align: left;
+      line-height: 18px;
+      color: #555;
+    }
+
+    .legend i {
+      width: 18px;
+      height: 18px;
+      float: left;
+      margin-right: 8px;
+      opacity: 0.7;
+    }
+
+    .label {
+      text-transform: capitalize;
+    }
+  </style>
+
+</head>
+<body id="body">
+  <div id="map" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
+  <script src="/browserify/load?libs=util,io,template,notifications,dynamarker,information,flyover"></script>
+  <script>
+    var i = require ( 'socket.io' );
+    var t = require ( 'template' );
+    var u = require ( 'util' );
+    var n = require ( 'notifications' );
+    var d = require ( 'dynamarker' );
+    var l = require ( 'information' );
+    var f = require ( 'flyover' );
+  </script>
+  <script>
+    var b = "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/";
+    var f = '/{z}/{x}/{y}.png';
+    var g = '/{z}/{y}/{x}.png';
+
+    var map = L.map ( 'map', {
+      attributionControl : false,
+      informationControl : false
+    } ).setView ( [-37.8, 144.9], 5 );
+
+    L.control.scale ( { imperial : false } ).addTo ( map );
+
+    var underlays = {
+      "arcgis" : L.tileLayer ( b + g, { maxZoom : 18 } ).addTo ( map )
+    };
+
+    var overlays = {
+    };
+
+    var icon = function ( data ) {
+      return "http://stocksoftware.com.au/images/logo.png";
+    };
+
+    var title = function ( data ) {
+      return data.asset.regn;
+    };
+
+    var message = function ( previous, current ) {
+      return "From [" + previous + "]\nTo [" + current + "]";
+    };
+
+    var create_icon = function ( data ) {
+      return L.dynaIcon ( { markers : t.markers, data : data } )
+    };
+
+    var information = L.control.information ( { template : t } ).addTo ( map );
+    information.update ( "incident", { title : "Information Panel" } );
+
+    function highlightFeature ( layer ) {
+      return function highlightFeature ( e ) {
+        information.update ( "incident", layer.properties );
+      }
+    }
+
+    function resetHighlight ( e ) {
+      information.update ( "incident", { title : "Information Panel" } );
+    }
+
+    var eachFeature = function ( feature, layer ) {
+      layer.on ( {
+        mouseover : highlightFeature ( feature ),
+        mouseout : resetHighlight
+        //click : highlightFeature ( feature )
+      } );
+    };
+
+    var color = function ( status ) {
+      var statuses = {
+        'out_of_control' : 'red',
+        'being_controlled' : 'grey',
+        'under_control' : 'lightgreen'
+      };
+      return statuses[status] || 'black';
+    };
+
+    var style = function ( feature ) {
+      var status = ( feature.properties['STATUS'] || "Unknown" ).toLocaleLowerCase ().replace ( /\ /g, '_' );
+      return {
+        fillColor : color ( status ),
+        weight : 2,
+        opacity : 1,
+        color : 'black',
+        dashArray : '3',
+        fillOpacity : 0.7
+      };
+    };
+
+    var panTo = function () {
+      map.panTo ( marker.getLatLng (), {
+        pan : { animate : true },
+        zoom : { animate : true }
+      } );
+    };
+
+    L.geoJson.ajax ( '/incidents', {
+      style : style,
+      onEachFeature : eachFeature
+    } ).addTo ( map );
+
+    L.geoJson.ajax ( '/data/burns', {
+      style : style,
+      onEachFeature : eachFeature
+    } ).addTo ( map );
+
+    var layer = L.layerGroup ( [] );
+
+    var assets = {};
+
+    var asset = i.connect ( "/asset", { transports : ['websocket'] } );
+    asset.on ( 'position', function ( data ) {
+      var marker;
+      var position = L.latLng (
+          data.position.coords.latitude,
+          data.position.coords.longitude );
+      if ( !assets[data.identity] ) {
+        marker = L.dynaMarker ( position, {
+          icon : create_icon ( data ),
+          title : title ( data )
+        } );
+        marker.addTo ( layer );
+        marker.on ( 'mouseover', function ( e ) {
+          map.addLayer ( e.target.options.track =
+                         e.target.options.track ||
+                         L.geoJson.ajax ( '/details?id=' + data.identity + '&type=linestring&hours=48', { } ) );
+          information.update ( "asset", L.extend ( {}, data.asset, data.arena ) );
+        } );
+        marker.on ( 'mouseout', function ( e ) {
+          map.removeLayer ( e.target.options.track );
+          information.update ( "incident", { title : "Information Panel" } );
+        } );
+        assets[data.identity] = marker;
+      }
+      else {
+        var marker = assets[data.identity];
+        if ( marker.getLatLng ().lat != position.lat ||
+             marker.getLatLng ().lng != position.lng ) {
+          map.notification ( icon ( data ), title ( data ),
+              message ( marker.getLatLng (), position ), null, null,
+              panTo );
+          if ( marker.options.track ) {
+            marker.options.track.refresh ();
+          }
+          marker.setIcon ( create_icon ( data ) );
+          marker.setLatLng ( position )
+        }
+      }
+    } );
+
+    L.control.flyover ( { layer : layer } ).addTo ( map );
+    L.control.search ( { layer : layer, initial : false} ).addTo ( map );
+    L.control.fullscreen ().addTo ( map );
+    L.hash ( map );
+  </script>
+</body>
+</html>
