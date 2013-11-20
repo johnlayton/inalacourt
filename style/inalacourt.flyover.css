@@ -1,3 +1,30 @@
+.flyover {
+  background: #DDD;
+  width: 10px;
+  padding: 0;
+}
+
+#body.flyover-open #flyover {
+  padding-left: 5px;
+  width: 200px;
+}
+
+.flyover #flyover-content {
+  width: 0;
+}
+
+#body.flyover-open #flyover-content {
+  width: 100%;
+}
+
+#body .leaflet-right {
+  margin-right: 10px;
+}
+
+#body.flyover-open .leaflet-right {
+  margin-right: 205px;
+}
+
 /* flyover control */
 .leaflet-control-flyover {
   box-shadow: 0 1px 7px rgba(0, 0, 0, 0.4);
