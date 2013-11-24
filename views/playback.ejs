@@ -72,31 +72,31 @@
           </ul>
         </li>
 
-        <li class="ctrl">
-          <a id="backward"><span class="glyphicon glyphicon-backward"></span></a>
+        <li class="btn-group  btn-group-sm">
+          <ul class="nav navbar-nav">
+            <li class="ctrl">
+              <a id="backward"><span class="glyphicon glyphicon-backward"></span></a>
+            </li>
+            <li class="ctrl">
+              <a id="fast-backward"><span class="glyphicon glyphicon-fast-backward"></span></a>
+            </li>
+            <li class="ctrl">
+              <a id="step-backward"><span class="glyphicon glyphicon-step-backward"></span></a>
+            </li>
+            <li class="ctrl">
+              <a id="play" ng-click="toggle()"><span class="glyphicon glyphicon-{{ playing ? 'pause' : 'play' }}"></span></a>
+            </li>
+            <li class="ctrl">
+              <a id="step-forward"><span class="glyphicon glyphicon-step-forward"></span></a>
+            </li>
+            <li class="ctrl">
+              <a id="fast-forward"><span class="glyphicon glyphicon-fast-forward"></span></a>
+            </li>
+            <li class="ctrl">
+              <a id="forward"><span class="glyphicon glyphicon-forward"></span></a>
+            </li>
+          </ul>
         </li>
-        <li class="ctrl">
-          <a id="fast-backward"><span class="glyphicon glyphicon-fast-backward"></span></a>
-        </li>
-        <li class="ctrl">
-          <a id="step-backward"><span class="glyphicon glyphicon-step-backward"></span></a>
-        </li>
-        <li class="ctrl">
-          <a id="play" ng-click="toggle()"><span class="glyphicon glyphicon-{{ playing ? 'pause' : 'play' }}"></span></a>
-        </li>
-        <li class="ctrl">
-          <a id="step-forward"><span class="glyphicon glyphicon-step-forward"></span></a>
-        </li>
-        <li class="ctrl">
-          <a id="fast-forward"><span class="glyphicon glyphicon-fast-forward"></span></a>
-        </li>
-        <li class="ctrl">
-          <a id="forward"><span class="glyphicon glyphicon-forward"></span></a>
-        </li>
-
-        <!--<li>-->
-        <!--<a href="">{{ current.time | date:'medium' }}</a>-->
-        <!--</li>-->
 
         <li class="dropdown">
           <a class="dropdown-toggle" id="datepicker-dropdown" role="button" data-toggle="dropdown" data-target="#" href="#">

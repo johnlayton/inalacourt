@@ -1,6 +1,7 @@
 #!/bin/env node
 var connect = require ( 'connect' )
   , express = require ( 'express' )
+  , _ = require ( 'lodash' )
   , fs = require ( 'fs' )
   , fsx = require ( 'fs-extra' )
   , ejs = require ( 'ejs' )
@@ -14,9 +15,10 @@ var connect = require ( 'connect' )
   , brfs = require ( 'brfs' )
   , through = require ( 'through' )
   , jsonstream = require ( 'JSONStream' )
-  , report = require ( './lib/inalacourt.tracplus.js' )
+  , tracplus = require ( './lib/inalacourt.tracplus.js' )
   , geojson = require ( './lib/inalacourt.geojson.js' )
-  , database = require ( './lib/inalacourt.database.js' )
+  , reports = require ( './lib/inalacourt.reports.js' )
+  , notes = require ( './lib/inalacourt.notes.js' )
   , emap = require ( './lib/inalacourt.emap.js' )
   , emap_tiles = require ( './lib/inalacourt.emap.tiles.js' )
   , georss = require ( './lib/inalacourt.georss.js' )
@@ -139,6 +141,10 @@ var libs = {
     library : './lib/inalacourt.nafc.incident.js',
     options : { expose : 'incident' }
   },
+  nafcnote : {
+    library : './lib/inalacourt.nafc.nafcnote.js',
+    options : { expose : 'nafcnote' }
+  },
   broadcast : {
     library : './lib/inalacourt.nafc.broadcast.js',
     options : { expose : 'broadcast' }
@@ -216,6 +222,14 @@ app.get ( "/nafc/playback", function ( req, res ) {
   } );
 } );
 
+app.get ( "/nafc/nafcnote", function ( req, res ) {
+  var agent = req.headers['user-agent'];
+  res.render ( 'nafcnote', {
+    title : 'NAFC Notes',
+    agent : agent
+  } );
+} );
+
 app.get ( "/nafc/incident", function ( req, res ) {
   var agent = req.headers['user-agent'];
   res.render ( 'incident', {
@@ -257,13 +271,13 @@ app.get ( "/regions", function ( req, res ) {
     .pipe ( res )
   var file = path.join ( "data", "regions.json" );
   handler.write ( esrijson ( fsx.readJsonFileSync ( file ) ) );
-  handler.end ( );
+  handler.end ();
 } );
 
 app.get ( "/details", function ( req, res ) {
   var agent = req.headers['user-agent'];
   res.set ( "Content-Type", "application/json" );
-  database ( "reports" )
+  reports ()
     .list ( ( req.param ( 'id' ) || 1 ), req.param ( 'hours' ) )
     .pipe ( geojson ( req.param ( 'type' ) || "points" ) )
     .pipe ( oppressor ( req ) )
@@ -273,7 +287,7 @@ app.get ( "/details", function ( req, res ) {
 app.get ( "/tracks", function ( req, res ) {
   var agent = req.headers['user-agent'];
   res.set ( "Content-Type", "application/json" );
-  database ( "reports" )
+  reports ()
     .list ( ( req.param ( 'id' ) || 1 ), req.param ( 'hours' ) )
     .pipe ( geojson ( req.param ( 'type' ) || "multipoint" ) )
     .pipe ( oppressor ( req ) )
@@ -283,7 +297,7 @@ app.get ( "/tracks", function ( req, res ) {
 app.get ( "/devices", function ( req, res ) {
   var agent = req.headers['user-agent'];
   res.set ( "Content-Type", "application/json" );
-  database ( 'reports' )
+  reports ()
     .latest ()
     .pipe ( req.param ( 'id' ) ? geojson ( "passthrough" ) : geojson ( "identity" ) )
     .pipe ( oppressor ( req ) )
@@ -303,11 +317,11 @@ app.get ( "/browserify.js", function ( req, res ) {
     }, browser () )
     .transform ( 'brfs' )
     .bundle ( /*function ( err, src ) {
-    if ( err ) {
-      console.log( src )
-      error ( "Browserify Bundle", err )
-    }
-  } */)
+     if ( err ) {
+     console.log( src )
+     error ( "Browserify Bundle", err )
+     }
+     } */ )
     .pipe ( oppressor ( req ) )
     .pipe ( res )
 } );
@@ -327,7 +341,7 @@ io.set ( 'log level', 1 );
 
 var sockets = io.of ( '/asset' );
 io.sockets.on ( 'connection', function ( socket ) {
-  database ( 'reports' ).latest ( function ( err, item ) {
+  reports ().latest ( function ( err, item ) {
     socket.emit ( 'position', item );
   } );
 } );
@@ -337,18 +351,71 @@ setInterval ( function () {
     username : app.get ( "username" ),
     password : app.get ( "password" )
   };
-  report ( identity, function ( err, item ) {
+  tracplus ( identity, function ( err, item ) {
     if ( err ) {
       error ( "Report", err );
     }
     else {
-      database ( 'reports' ).put ( item, function ( err, item ) {
+      reports ().put ( item, function ( err, item ) {
         io.sockets.emit ( 'position', item );
       } );
     }
   } );
 }, 10000 );
 
+var toItem = function ( note, date ) {
+  return {
+    id : note.id,
+    date : date,
+    note : note
+  };
+};
+
+var toNote = function ( item ) {
+  return item.note;
+};
+
+io.of ( '/note' ).on ( 'connection', function ( socket ) {
+
+  notes ().latest ( function ( err, item ) {
+    console.log ( item );
+    socket.emit ( 'onNoteCreated', toNote ( item ) );
+    socket.emit ( 'onNoteMoved', toNote ( item ) );
+    socket.emit ( 'onNoteUpdated', toNote ( item ) );
+  } );
+
+  socket.on ( 'createNote', function ( data ) {
+    notes ().put ( toItem ( data, new Date () ), function ( err, item ) {
+      socket.broadcast.emit ( 'onNoteCreated', data );
+    } );
+  } );
+
+  socket.on ( 'updateNote', function ( data ) {
+    notes ().current ( data.id , function(err, item) {
+      var self = _.clone( item );
+      self.title = data.title;
+      self.body = data.body;
+      notes ().put ( toItem ( self, new Date () ), function ( err, item ) {
+        socket.broadcast.emit ( 'onNoteUpdated', item );
+      } );
+    });
+  } );
+
+  socket.on ( 'moveNote', function ( data ) {
+    notes ().current ( data.id , function(err, item) {
+      var self = _.clone( item );
+      self.x = data.x;
+      self.y = data.y;
+      notes ().put ( toItem ( self, new Date () ), function ( err, item ) {
+        socket.broadcast.emit ( 'onNoteUpdated', item );
+      } );
+    });
+  } );
+
+  socket.on ( 'deleteNote', function ( data ) {
+    socket.broadcast.emit ( 'onNoteDeleted', data );
+  } );
+} );
 /*
  Regions -> https://emap.dse.vic.gov.au/ArcGIS/rest/services/boundaries/MapServer/2/query?returnGeometry=true&spatialRel=esriSpatialRelIntersects&where=1+%3d+1&outSR=4326&outFields=*&f=json&
  Burns   -> https://emap.dse.vic.gov.au/ArcGIS/rest/services/phoenix/MapServer/1/query?returnGeometry=true&spatialRel=esriSpatialRelIntersects&where=1+%3d+1&outSR=4326&outFields=*&f=json&

@@ -1,7 +1,7 @@
 <div id="container" ng-controller="Tracking">
-  <leaflet center="canberra" defaults="defaults">
+  <leaflet id="tracking" center="canberra" defaults="defaults">
     <div id="flyover" class="flyover" style="position: absolute; z-index: 5000; top: 0; right: 0; height: 100%;">
-      <span id="flyover-toggle" style="cursor: pointer;" ng-click="toggleFlyover()">&lt;</span>
+      <div id="flyover-toggle" style="cursor: pointer;" ng-click="toggleFlyover()" class="glyphicon glyphicon-search"></div>
       <div id="flyover-content"></div>
     </div>
   </leaflet>

@@ -1,0 +1,44 @@
+<style>
+  #nafcnote {
+    background: url(/images/bg_corkboard.jpg) top left repeat fixed;
+    height: 400px;
+  }
+
+  .sticky-note {
+    position: absolute;
+    background: #fcf8e3;
+  }
+
+  .sticky-note .title {
+    /*background: transparent;*/
+    background: #fcf8e3;
+    border: none;
+    display: block;
+    /*font-size: 20px;*/
+    font-weight: bold;
+  }
+
+  .sticky-note .body {
+    /*background: transparent;*/
+    background: #fcf8e3;
+    border: none;
+    display: block;
+  }
+</style>
+<div id="nafcnote" ng-controller="NafcNote">
+
+  <!--<div class="navbar navbar-inverse">-->
+  <div class="navbar" role="navigation">
+    <button id="createButton" ng-click="createNote()" class="btn btn-info pull-right">Create Note</button>
+  </div>
+
+  <sticky-note ng-repeat="note in notes" note="note"
+       class="alert alert-block sticky-note"
+       update-note="updateNote({note:note})"
+       ondelete="deleteNote(id)">
+    <button type="button" class="close" ng-click="deleteNote(note.id)">&times;</button>
+    <input ng-model="note.title" ng-change="updateNote(note)" type="text" class="title" >
+    <textarea ng-model="note.body" ng-change="updateNote(note)" class="body">{{note.body}}</textarea>
+  </sticky-note>
+
+</div>

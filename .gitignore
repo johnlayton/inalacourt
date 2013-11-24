@@ -3,6 +3,7 @@ dist/_components/*
 dist/angular/*
 node_modules/*
 data/reports/*
+data/notes/*
 data/test_*/*
 
 data/burns.json
