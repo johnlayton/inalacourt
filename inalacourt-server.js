@@ -162,6 +162,10 @@ var libs = {
     library : './lib/inalacourt.nafc.playback.js',
     options : { expose : 'playback' }
   },
+  openlyrs : {
+    library : './lib/inalacourt.nafc.openlyrs.js',
+    options : { expose : 'openlyrs' }
+  },
   victoria : {
     library : './lib/inalacourt.nafc.victoria.js',
     options : { expose : 'victoria' }
@@ -219,6 +223,14 @@ app.get ( "/nafc/playback", function ( req, res ) {
   var agent = req.headers['user-agent'];
   res.render ( 'playback', {
     title : 'NAFC Playback',
+    agent : agent
+  } );
+} );
+
+app.get ( "/nafc/openlyrs", function ( req, res ) {
+  var agent = req.headers['user-agent'];
+  res.render ( 'openlyrs', {
+    title : 'NAFC Open Layers',
     agent : agent
   } );
 } );
@@ -347,7 +359,8 @@ io.sockets.on ( 'connection', function ( socket ) {
   } );
 } );
 
-temporal.delay( 10000, function() {
+temporal.loop( 10000, function() {
+  console.log( "Tracplus Query..." )
   var identity = {
     username : app.get ( "username" ),
     password : app.get ( "password" )
