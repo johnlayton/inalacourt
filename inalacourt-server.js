@@ -22,6 +22,7 @@ var connect = require ( 'connect' )
   , emap = require ( './lib/inalacourt.emap.js' )
   , emap_tiles = require ( './lib/inalacourt.emap.tiles.js' )
   , georss = require ( './lib/inalacourt.georss.js' )
+  , temporal = require("temporal")
   , esrijson = require ( './lib/inalacourt.esri2json.js' );
 
 var app = express ();
@@ -346,7 +347,7 @@ io.sockets.on ( 'connection', function ( socket ) {
   } );
 } );
 
-setInterval ( function () {
+temporal.delay( 10000, function() {
   var identity = {
     username : app.get ( "username" ),
     password : app.get ( "password" )
@@ -361,24 +362,24 @@ setInterval ( function () {
       } );
     }
   } );
-}, 10000 );
+});
 
-var toItem = function ( note, date ) {
-  return {
-    id : note.id,
-    date : date,
-    note : note
-  };
-};
-
-var toNote = function ( item ) {
-  return item.note;
-};
 
 io.of ( '/note' ).on ( 'connection', function ( socket ) {
 
+  var toItem = function ( note, date ) {
+    return {
+      id : note.id,
+      date : date,
+      note : note
+    };
+  };
+
+  var toNote = function ( item ) {
+    return item.note;
+  };
+
   notes ().latest ( function ( err, item ) {
-    console.log ( item );
     socket.emit ( 'onNoteCreated', toNote ( item ) );
     socket.emit ( 'onNoteMoved', toNote ( item ) );
     socket.emit ( 'onNoteUpdated', toNote ( item ) );
